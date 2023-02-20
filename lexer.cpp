@@ -173,7 +173,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 break;
 
 
-                
+            // transition for identifier
             case 2:
 
 
@@ -186,7 +186,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 break;
             
 
-
+            // transition for comment
             case 3:
 
 
@@ -199,7 +199,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 break;
 
                 
-            
+            // transition for >= and > operator
             case 6:
 
 
@@ -214,7 +214,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 break;
 
 
-
+            // transition for <= ,<> and < operator
             case 8:
 
 
@@ -234,6 +234,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
 
                 break;
 
+            // transition for ;= operator
             case 10:
                 if (stream[index] == '='){
                     cout << ":= , NULL\n"; 
@@ -246,6 +247,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
 
 
             // 'other' transitions
+
+            // transition for identifier
             case 4:
                
                 // check keywords
@@ -262,7 +265,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 index -= 2;
                 break;
 
-            
+            // transtition for comment or somehow simple semi-colon
             case 5:
 
 
@@ -276,7 +279,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 index -= 2;
                 break;
 
-
+            
+            // transition for > operator
             
             case 7:
 
@@ -286,7 +290,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 index -= 2;
                 break;
 
-
+            // transition for < operator
             case 9:
 
 
@@ -294,7 +298,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 state = 1;
                 index -= 2;
                 break;
-            
+
+            // transition for : (Error)
             case 11:
                 cout << ": , NULL\n";
                 state = 1;
