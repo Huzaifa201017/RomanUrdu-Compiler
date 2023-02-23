@@ -1,0 +1,32 @@
+Regular Definitions:
+
+letter -> [a-z] | [A-Z]
+digit -> [0-9]
+specialChars -> !| |"|#|$|%|&|(|)|_|+|-|=|~|{|}|\|||;|:|'|<|,|.|>|?|/
+
+Identifier:
+
+id -> (_ + letter)(_ + letter + digit)^*
+
+Comment:
+cmnt -> ;(letter + digit + specialChars + `)^+
+
+Relational Operators:
+
+RO -> < | <= | > | >= | <> | =
+
+Integer:
+
+NUM -> (digit)^+
+
+String:
+
+str -> `(letter + digit + specialChars + \n)`
+
+I/O operators:
+
+IO -> << | >>
+
+
+Note:
+specialChars includes all the special characters according to the ASCI table , except \n and backtick(`).
