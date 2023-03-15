@@ -34,31 +34,155 @@ void parser::resetPointer()
 
 bool parser :: C(){
 
+    if (_lexer.peek(1).tokenType == TokenType::semi_colon){
+        expect(TokenType::semi_colon);
+
+        if(_lexer.peek(1).tokenType == TokenType::cmnt){
+            expect(TokenType::semi_colon);
+            return true;
+        }
+        else {
+            return true;
+        }
+       
+    }
+    
+    
+    return false;
     
 
 }
 
 bool parser :: E(){
     
+    if(R()) {
+
+        return _E();
+
+    }
+
+    return false;
 }
 
 bool parser :: _E(){
+
+    if (_lexer.peek(1).tokenType == TokenType::plus){
+        expect(TokenType::plus);
+
+        if (R()){
+
+            return _E();
+
+        }else{
+            return false;
+        }
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::minus){
+        
+        expect(TokenType::minus);
+
+        if (R()){
+
+            return _E();
+
+        }else{
+            return false;
+        }
+    }
+    
+    return true;
     
 }
 
 bool parser :: R(){
     
+    if (T()){
+       return _R();
+    }
+
+    return false;
+
+
 }
 
 bool parser :: _R(){
     
-}
+    if (_lexer.peek(1).tokenType == TokenType::mul){
 
-bool parser :: T(){
+        expect(TokenType::mul);
+
+        if (T()){
+
+            return _R();
+
+        }else{
+            return false;
+        }
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::div) {
+        
+        expect(TokenType::div);
+
+        if (T()) {
+
+            return _R();
+
+        }
+        else{
+            return false;
+        }
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::mod) {
+        
+        expect(TokenType::mod);
+
+        if (T()) {
+
+            return _R();
+
+        }
+        else {
+            return false;
+        }
+    }
     
+    return true;
 }
 
-bool parser :: F(){
+bool parser :: T() {
+
+   if (_lexer.peek(1).tokenType == TokenType::ID){
+      expect(TokenType::ID);
+      return true;
+   }
+   else if (_lexer.peek(1).tokenType == TokenType::NUM){
+        expect(TokenType::NUM);
+        return true;
+   }
+   else if (_lexer.peek(1).tokenType == TokenType::openPara ){
+     
+     expect(TokenType::openPara);
+     if (E()) {
+
+        if (_lexer.peek(1).tokenType == TokenType::closePara ){
+            
+            expect(TokenType::closePara);
+            return true;
+        }
+
+        expect(TokenType::closePara);
+
+     }else {
+        expect(TokenType::ERROR);
+        return false;
+     }
+
+   }
+   return false;
+   
+}
+
+bool parser :: F() {
     
 }
 
@@ -79,7 +203,13 @@ bool parser :: A(){
 }
 
 bool parser :: Datatype(){
-    
+
+    if (_lexer.peek(1).tokenType == TokenType::adad ){
+        expect(TokenType::adad);
+        return true;
+    }
+    expect(TokenType::adad);
+    return false;
 }
 
 bool parser :: V(){
@@ -131,6 +261,25 @@ bool parser :: Var(){
 }
 
 bool parser :: Conditional(){
+
+     if (_lexer.peek(1).tokenType == TokenType::agar ){
+        expect(TokenType::agar);
+
+        if(_lexer.peek(1).tokenType == TokenType::openPara){
+            expect(TokenType::openPara);
+
+            if (E()){
+                if(_lexer.peek(1).tokenType == TokenType::RO){
+                    expect(TokenType::RO);
+
+                    if (E()) {
+                        
+
+                    }
+                }
+            }
+        }
+     }
     
 }
 
