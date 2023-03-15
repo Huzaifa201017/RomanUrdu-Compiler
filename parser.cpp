@@ -30,6 +30,132 @@ void parser::resetPointer()
 {
     _lexer.resetPointer();
 }
+
+
+bool parser :: C(){
+
+    
+
+}
+
+bool parser :: E(){
+    
+}
+
+bool parser :: _E(){
+    
+}
+
+bool parser :: R(){
+    
+}
+
+bool parser :: _R(){
+    
+}
+
+bool parser :: T(){
+    
+}
+
+bool parser :: F(){
+    
+}
+
+bool parser :: Func(){
+    
+}
+
+bool parser :: Functype(){
+    
+}
+
+bool parser :: P(){
+    
+}
+
+bool parser :: A(){
+    
+}
+
+bool parser :: Datatype(){
+    
+}
+
+bool parser :: V(){
+    
+}
+
+bool parser :: B(){
+    
+}
+
+bool parser :: O(){
+    
+}
+
+bool parser :: D(){
+    
+}
+
+bool parser :: FC(){
+    
+}
+
+bool parser :: Z(){
+    
+}
+
+bool parser :: U(){
+    
+}
+
+bool parser :: print(){
+    
+}
+
+bool parser :: H(){
+    
+}
+
+bool parser :: G(){
+    
+}
+
+bool parser :: input(){
+    
+}
+
+bool parser :: Var(){
+    
+}
+
+bool parser :: Conditional(){
+    
+}
+
+bool parser :: ElseIf(){
+    
+}
+
+bool parser :: Else(){
+    
+}
+
+bool parser :: While(){
+    
+}
+
+bool parser :: Stmts(){
+    
+}
+
+bool parser :: Stmt(){
+    
+}
+bool parser :: Start(){
+    
+}
 //this function is for sample purposes only
 /*
 bool parser::statements()

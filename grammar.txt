@@ -1,5 +1,79 @@
-This will be your grammar file in future assignments
-Leave it as it is for now
 GRAMMAR:
+
+
+|------------------------------------------------- Comment ---------------------------------------------|
+
+C -> ;cmnt
+
+|------------------------------------------- Arithematic Expressions -----------------------------------|
+
+E -> RE'
+E' -> +RE' | -RE' | ^
+R -> TR'
+R' -> *TR' | /TR' | %TR' | ^
+T -> id|num|(E)
+
+
+|-------------------------------------------- Function Declaration -------------------------------------|
+
+F -> kaam Func (P) karo Stmts kaam khatam
+Func -> markazi@khali | ID@FuncType
+FuncType -> adad | khali
+
+|-------------------------------------- Function Paramters while declaration. -----------------------------------|
+
+P -> ID@DataType A | ^
+A -> | ID@DataType A | ^
+
+|-------------------------------------------------DataTypes ---------------------------------------------|
+
+DataType -> adad
+
+|------------------------------------- Variable Declaration / Initialization ---------------------------|
+
+V -> rakho ID@DataType B; D
+B -> ASSIGN O | ^
+O -> E | FC
+D -> cmnt | ^
+
+
+|--------------------------------------------- Function Call ---------------------------------------------|
+
+FC -> chalao ID(Z);
+Z -> ID U | ^
+U -> | ID U  | ^
+
+|--------------------------------------------- Print  ---------------------------------------------|
+
+print -> dekhao << G H ;
+H -> << G H | ^
+G -> str | E
+
+|--------------------------------------------- Input  ---------------------------------------------|
+
+input -> lo H >> Var
+Var  -> ID | ID@DataType
+
+|--------------------------------------------- Conditionals  ---------------------------------------------|
+
+Conditional -> agar (E RO E) to phir karo Stmts ElseIf Else bas karo
+ElseIf -> warna agar (E RO E) to phir Stmts ElseIf | ^
+Else -> warna phir Stmts | ^
+
+
+|--------------------------------------------- While Loop  ---------------------------------------------|
+
+while -> jab tak (E RO E) karo Stmts bas karo
+
+
+|--------------------------------------------- Statements  ---------------------------------------------|
+Stmts -> Stmt Stmts | ^
+Stmt -> C | E | V | FC | print | input | Conditional | while
+
+|--------------------------------------------- Starting Point  ---------------------------------------------|
+Start -> F Start | ^
+
+
+
 
 Regular Expressions used in GRAMMAR
