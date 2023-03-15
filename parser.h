@@ -34,7 +34,9 @@ public:
     bool H();
     bool G();
     bool input();
+    bool I();
     bool Var();
+    bool J();
     bool Conditional();
     bool ElseIf();
     bool Else();

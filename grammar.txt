@@ -35,7 +35,7 @@ DataType -> adad
 V -> rakho ID@DataType B; D
 B -> ASSIGN O | ^
 O -> E | FC
-D -> cmnt | ^
+D -> cmnt | ^    
 
 -
 |--------------------------------------------- Function Call ---------------------------------------------|
@@ -54,8 +54,11 @@ G -> str | E
 -
 |--------------------------------------------- Input ---------------------------------------------|
 
-input -> lo H >> Var ;D
-Var  -> ID | ID@DataType
+
+input -> lo H >> Var I ;
+I -> >> Var I | ^
+Var  -> IDJ
+J -> @DataType | ^
 
 |--------------------------------------------- Conditionals  ---------------------------------------------|
 
@@ -76,11 +79,11 @@ Stmt -> C  | V | FC | print | input | Conditional | while
 |--------------------------------------------- Starting Point  ---------------------------------------------|
 Start -> F Start | ^
 
-|-------------------------variable initialize---------------------------|
- I -> ID 
+
 
 | The thing like x = 2
 | The thing like cin >> var >> var2;
+| in lexer change the thing that in default case , add the word to the lexer as an error.
 
 
 Regular Expressions used in GRAMMAR
