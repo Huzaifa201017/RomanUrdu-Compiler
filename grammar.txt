@@ -32,22 +32,27 @@ DataType -> adad
 
 |------------------------------------- Variable Declaration / Initialization ---------------------------|
 
-V -> rakho ID@DataType B; D
+V -> rakho ID@DataType B; Comment
 B -> ASSIGN O | ^
 O -> E | FC
-D -> cmnt | ^    
+Comment -> cmnt | ^
+
+
+K -> ID B; Comment
+ 
+
 
 -
 |--------------------------------------------- Function Call ---------------------------------------------|
 
-FC -> chalao ID(Z);D
+FC -> chalao ID(Z);Comment
 Z -> E U | ^
 U -> | E U  | ^
 
 -
 |--------------------------------------------- Print  ---------------------------------------------|
 
-print -> dekhao << G H ;D
+print -> dekhao << G H ;Comment
 H -> << G H | ^
 G -> str | E
 
@@ -55,7 +60,7 @@ G -> str | E
 |--------------------------------------------- Input ---------------------------------------------|
 
 
-input -> lo H >> Var I ;
+input -> lo H >> Var I;Comment
 I -> >> Var I | ^
 Var  -> IDJ
 J -> @DataType | ^

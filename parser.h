@@ -44,6 +44,8 @@ public:
     bool Stmts();
     bool Stmt();
     bool Start();
+    bool K();
+    bool Comment();
     /*Terminal functions goes here use peek and expect*/
     /*
     use TokenType:: for token names for example
