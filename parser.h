@@ -26,7 +26,6 @@ public:
     bool V();
     bool B();
     bool O();
-    bool D();
     bool FC();
     bool Z();
     bool U();
