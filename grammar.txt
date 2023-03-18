@@ -16,9 +16,12 @@ T -> id|num|(E)
 -
 |-------------------------------------------- Function Declaration -------------------------------------|
 
-F -> kaam Func@FuncType (P) karo Stmts kaam khatam
+F -> kaam Func@FuncType (P) karo Stmts W kaam khatam
 Func -> markazi | ID
 FuncType -> adad | khali
+
+|--------------------------------------------Return Statement------------------------------------------|
+W -> wapas bhaijo E; Comment | ^
 
 -
 |-------------------------------------- Function Paramters while declaration. -----------------------------------|
@@ -38,7 +41,7 @@ O -> E; | FC
 Comment -> cmnt | ^
 
 
-K -> ID B; Comment
+K -> ID B Comment
  
 
 
@@ -82,13 +85,8 @@ Stmts -> Stmt Stmts | ^
 Stmt -> C  | V | FC | print | input | Conditional | while
 
 |--------------------------------------------- Starting Point  ---------------------------------------------|
-Start -> F Start | ^
+Start -> F Start | C Start | ^
 
-
-
-| The thing like x = 2
-| The thing like cin >> var >> var2;
-| in lexer change the thing that in default case , add the word to the lexer as an error.
 
 
 Regular Expressions used in GRAMMAR
