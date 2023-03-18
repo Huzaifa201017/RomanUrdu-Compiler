@@ -2,25 +2,29 @@
 #include "parser.h"
 #include "lexer.h"
 #include "lexer.cpp"
+#include "parser.cpp"
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-	
+	parser p("sample_code.ru");
+	p.Start();
 	//asking for file name as command line arguments
 	if (argc == 2)
 	{
 		
 		
-		lexer _lexer(argv[1]);
-		token t;
-		t = _lexer.getNextToken();
+		// lexer _lexer(argv[1]);
+		// token t;
+		// t = _lexer.getNextToken();
 		
-		while (t.tokenType != TokenType::END_OF_FILE)
-		{
-			t.Print();
-			t = _lexer.getNextToken();
-		}
+		// while (t.tokenType != TokenType::END_OF_FILE)
+		// {
+		// 	t.Print();
+		// 	t = _lexer.getNextToken();
+		// }
+		
+		
 	}
 	else if (argc > 2)
 	{ //argument limit exceeds

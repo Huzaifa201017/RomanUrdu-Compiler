@@ -16,8 +16,8 @@ T -> id|num|(E)
 -
 |-------------------------------------------- Function Declaration -------------------------------------|
 
-F -> kaam Func (P) karo Stmts kaam khatam
-Func -> markazi@khali | ID@FuncType
+F -> kaam Func@FuncType (P) karo Stmts kaam khatam
+Func -> markazi | ID
 FuncType -> adad | khali
 
 -
@@ -62,7 +62,7 @@ G -> str | E
 
 input -> lo H >> Var I;Comment
 I -> >> Var I | ^
-Var  -> IDJ
+Var  -> ID J
 J -> @DataType | ^
 
 |--------------------------------------------- Conditionals  ---------------------------------------------|

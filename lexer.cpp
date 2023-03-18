@@ -107,7 +107,7 @@ void lexer::setCurrentPointer(int pos)
         index = 0;
 }
 
-void lexer::Tokenize()//function that tokenizes your input stream
+void lexer::Tokenize()         //function that tokenizes your input stream
 {
     
   
@@ -122,7 +122,10 @@ void lexer::Tokenize()//function that tokenizes your input stream
         switch (state)
         {
             case 1:
-
+                
+                if(stream[index] == ' ' || stream[index] == '\t' || stream[index] == '\n'){
+                    break;
+                }
 
                 if (isalpha(stream[index]) || stream[index] == '_'){
 
@@ -178,6 +181,9 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 else if (isdigit(stream[index])){
                     chars += stream[index];
                     state=14;
+
+                }else{
+                    state = 20; // error state
                 }
                 break;
 
@@ -376,6 +382,10 @@ void lexer::Tokenize()//function that tokenizes your input stream
 
 
             default:
+                cout << "Yes\n";
+                this->tokens.push_back(token("",TokenType::ERROR));
+                index -= 1;
+                state = 1;
                 break;
             
 
@@ -459,6 +469,7 @@ token lexer::peek(int howFar)
     }
 
     int peekIndex = index + howFar - 1;
+    
     if (peekIndex > (tokens.size() - 1))
     {                                                 // if peeking too far
         return token("", TokenType::END_OF_FILE); // return END_OF_FILE

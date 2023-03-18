@@ -6,7 +6,7 @@ class parser
 {
     lexer _lexer;
 public:
-    void syntax_error();
+    void syntax_error(TokenType t);
     token expect(TokenType expected_type);
     parser(const char filename[]);
     void readAndPrintAllInput();
