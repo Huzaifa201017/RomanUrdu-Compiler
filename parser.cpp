@@ -120,8 +120,6 @@ bool parser :: _E(){
 
         return true;
     }
-
-    return false;
    
     
 }
@@ -167,8 +165,6 @@ bool parser :: _R(){
 
         return true;
     }
-
-    return false;
     
     
 }
@@ -287,7 +283,7 @@ bool parser :: F() {
     }else{
         expect(TokenType::kaam);
     }
-    //expect(TokenType::ERROR);
+
             
         
         
@@ -443,35 +439,33 @@ bool parser :: V() {
     if (_lexer.peek(1).tokenType == TokenType::rakho ){
         expect(TokenType::rakho);
 
-         if (_lexer.peek(1).tokenType == TokenType::ID ){
-            expect(TokenType::ID);
+        if (_lexer.peek(1).tokenType == TokenType::ID ){
+             expect(TokenType::ID);
 
-             if (_lexer.peek(1).tokenType == TokenType::at ){
+              if (_lexer.peek(1).tokenType == TokenType::at ){
                     expect(TokenType::at);
 
-                    if (Datatype()){
+                    Datatype();
+                    B();
 
-                        if(B()){
-
-                            if (_lexer.peek(1).tokenType == TokenType::semi_colon ){
-                                expect(TokenType::semi_colon);
-                                
-                                if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                                    expect(TokenType::cmnt);
-                                }
-
-                                return true;
-
-                            }
-                        }
+                    if (_lexer.peek(1).tokenType == TokenType::cmnt ){
+                        expect(TokenType::cmnt);
                     }
 
+                    return true;
 
+            
+                      
                     
-             }
+                    
+                }else{
+                    expect(TokenType::at);
+                }
 
         
 
+        }else{
+            expect(TokenType::ID);
         }
     }
 
@@ -486,22 +480,33 @@ bool parser :: B() {
     if (_lexer.peek(1).tokenType == TokenType::assign ){
         
         expect(TokenType::assign);
+        O();
+      
+        return true;
+        
 
-        if ( O()) {
-            return true;
-        }
-
-        return false;
+        
+    }else if(_lexer.peek(1).tokenType == TokenType::semi_colon)  {
+        expect(TokenType::semi_colon);
+         return true;
     }
-    return true;
+
+    return false;
+   
 }
 
 bool parser :: O() {
-
-    if (E() || FC()){
+    
+    FC();
+    E();
+    
+    if(_lexer.peek(1).tokenType == TokenType::semi_colon)  {
+        expect(TokenType::semi_colon);
         return true;
     }
-    return false;
+   
+    return true;
+    
 }
 
 
@@ -605,29 +610,27 @@ bool parser :: print(){
         if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
         {
             expect(TokenType::OUTPUT);
+            G();
+            H();
+          
+            if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+            {
+                expect(TokenType::semi_colon);
 
-            if(G()) {
-
-                if(H()) {
-
-                    if (_lexer.peek(1).tokenType == TokenType::semi_colon)
-                    {
-                        expect(TokenType::semi_colon);
-
-                        if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                            expect(TokenType::cmnt);
-                        }
-
-                        return true;
-                        
-                    }
-                    else
-                    {
-                        expect(TokenType::semi_colon);
-                    }
-
+                if (_lexer.peek(1).tokenType == TokenType::cmnt ){
+                    expect(TokenType::cmnt);
                 }
+
+                return true;
+                
             }
+            else
+            {
+                expect(TokenType::semi_colon);
+            }
+
+                
+            
           
             
         }
@@ -650,16 +653,10 @@ bool parser :: H(){
     if(_lexer.peek(1).tokenType == TokenType::OUTPUT)
     {
         expect(TokenType::OUTPUT);
-        if(G()){
-
-            if(H()){
-
-                return true;
-                
-            }
-        }
+        G();
+        H();
        
-       return false;
+       return true;
         
     }
     else
@@ -677,12 +674,11 @@ bool parser :: G(){
         expect(TokenType::STR);
         return true;
     }
-    else if (E())
+    else
     {
+        E();
         return true;
     }
-   
-    return false;
     
     
 }
@@ -697,24 +693,30 @@ bool parser :: input(){
         if (H() && _lexer.peek(1).tokenType == TokenType::INPUT)
         {
             expect(TokenType::INPUT);
+            Var();
+            I();
+           
 
-            if(Var() && I()){
+            if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+            {
+                expect(TokenType::semi_colon);
 
-                if (_lexer.peek(1).tokenType == TokenType::semi_colon)
-                {
-                    expect(TokenType::semi_colon);
-
-                    if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                        expect(TokenType::cmnt);
-                    }
-
-                    return true;
+                if (_lexer.peek(1).tokenType == TokenType::cmnt ){
+                    expect(TokenType::cmnt);
                 }
+
+                return true;
+
+            }else{
+                expect(TokenType::semi_colon);
+            }
                 
 
-            }
+            
           
             
+        }else{
+            expect(TokenType::INPUT);
         }
        
        
@@ -752,11 +754,11 @@ bool parser :: Var(){
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
         expect(TokenType::ID);
+        J();
+       
+        return true;
 
-        if(J()){
-            return true;
-
-        }
+        
        
     }
     return false;
@@ -769,11 +771,9 @@ bool parser :: J(){
     if (_lexer.peek(1).tokenType == TokenType::at)
     {
         expect(TokenType::at);
-        if(Datatype()){
-            return true;
-        }
+        Datatype();
+        return true;
         
-        return false;
     }
     else
     {
@@ -791,68 +791,90 @@ bool parser :: Conditional(){
         if(_lexer.peek(1).tokenType == TokenType::openPara){
 
             expect(TokenType::openPara);
+            E();
+            
 
-            if (E()) {
+            if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
-                if(_lexer.peek(1).tokenType == TokenType::RO){ 
-                    expect(TokenType::RO);
+                expect(TokenType::RO);
+                E();
+               
 
-                    if (E()) {
+                if(_lexer.peek(1).tokenType == TokenType::closePara){
 
-                        if(_lexer.peek(1).tokenType == TokenType::closePara){
+                    expect(TokenType::closePara);
 
-                            expect(TokenType::closePara);
+                    if(_lexer.peek(1).tokenType == TokenType::to){
+                        expect(TokenType::to);
 
-                            if(_lexer.peek(1).tokenType == TokenType::to){
-                                expect(TokenType::to);
+                        if(_lexer.peek(1).tokenType == TokenType::phir){
+                            expect(TokenType::to);
 
-                                if(_lexer.peek(1).tokenType == TokenType::phir){
-                                    expect(TokenType::to);
+                            if(_lexer.peek(1).tokenType == TokenType::karo){
+                                expect(TokenType::karo);
+
+                                Stmts();
+                                ElseIf();
+                                Else();
+                               
+                             
+
+                                if(_lexer.peek(1).tokenType == TokenType::bas){
+                                    expect(TokenType::bas);
 
                                     if(_lexer.peek(1).tokenType == TokenType::karo){
                                         expect(TokenType::karo);
 
-                                        
-                                        if(Stmts()){
-                                            
-                                            if (ElseIf()) {
+                                        return true;
 
-                                                if (Else()) {
-
-                                                    if(_lexer.peek(1).tokenType == TokenType::bas){
-                                                        expect(TokenType::bas);
-
-                                                        if(_lexer.peek(1).tokenType == TokenType::karo){
-                                                            expect(TokenType::karo);
-
-                                                            return true;
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            
-                                        }
-                                                            
-                                        
-
-                                        
+                                    }else{
+                                        expect(TokenType::karo);
                                     }
-                                        
+
+                                }else{
+                                    expect(TokenType::bas);
                                 }
+                                        
+                                    
+
+                                    
                                 
+                                                    
+                                
+
+                                
+                            }else{
+                                expect(TokenType::karo);
                             }
+
+                                
+                        }else{
+                            expect(TokenType::to);
                         }
+                        
+                    }else{
 
-
+                        expect(TokenType::to);
                     }
-                }
-            }
 
+                }else{
+                    expect(TokenType::closePara);
+                }
+
+
+                
+
+            }else{
+                expect(TokenType::RO);
+            }
+            
+
+        }else{
+
+            expect(TokenType::openPara);
         }
     }
 
-    return false;
     
 }
 
@@ -867,47 +889,62 @@ bool parser :: ElseIf() {
             if(_lexer.peek(1).tokenType == TokenType::openPara){
 
                 expect(TokenType::openPara);
-                if ( E() ) {
+                E();
+               
 
-                    if(_lexer.peek(1).tokenType == TokenType::RO){ 
+                if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
-                        expect(TokenType::RO);
+                    expect(TokenType::RO);
+                    E();
+                 
 
-                        if (E()) {
+                    if(_lexer.peek(1).tokenType == TokenType::closePara){
+                        expect(TokenType::closePara);
 
-                            if(_lexer.peek(1).tokenType == TokenType::closePara){
-                                expect(TokenType::closePara);
+                        if(_lexer.peek(1).tokenType == TokenType::to){
+                        
+                            expect(TokenType::to);
 
-                                if(_lexer.peek(1).tokenType == TokenType::to){
+
+                            if(_lexer.peek(1).tokenType == TokenType::phir){
                                 
-                                    expect(TokenType::to);
-
-
-                                    if(_lexer.peek(1).tokenType == TokenType::phir){
-                                        
-                                        expect(TokenType::to);
-
-                                        if(Stmts()){
-                                            
-                                            if (ElseIf()) {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
+                                expect(TokenType::to);
+                                Stmts();
+                                ElseIf();
+                                return true;
+                                
+                            }else{
+                                expect(TokenType::to);
                             }
 
-                           
-
+                        }else{
+                            expect(TokenType::to);
                         }
-                    }
-                }
 
+                    }else{
+                        expect(TokenType::closePara);
+                    }
+
+                        
+
+                    
+
+                }else{
+                    expect(TokenType::RO);
+                }
+                
+
+            }
+            else{
+                expect(TokenType::openPara);
             }
 
         }
+        else{
+            expect(TokenType::agar);
+        }
 
-        return false;
+        
 
     }
     else {
@@ -923,19 +960,22 @@ bool parser :: Else() {
 
         if(_lexer.peek(1).tokenType == TokenType::phir){
             expect(TokenType::phir);
+            Stmts();
+          
 
-            if (Stmts()){
+            return true;
+            
 
-                return true;
-            }
+        }else{
+            expect(TokenType::phir);
         }
 
-        return false;
+        
         
     }
     else{
 
-        return false;
+        return true;
     }
 
 }
@@ -953,51 +993,68 @@ bool parser :: While() {
             if(_lexer.peek(1).tokenType == TokenType::openPara){
 
                 expect(TokenType::openPara);
+                E();
+               
 
-                if (E()) {
+                if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
-                    if(_lexer.peek(1).tokenType == TokenType::RO){ 
+                    expect(TokenType::RO);
+                    E();
+                   
 
-                        expect(TokenType::RO);
+                    if(_lexer.peek(1).tokenType == TokenType::closePara){
+                        expect(TokenType::closePara);
 
-                        if (E()) {
+                        if(_lexer.peek(1).tokenType == TokenType::karo){
+                        
+                            expect(TokenType::karo);
+                            
+                            Stmts();
 
-                            if(_lexer.peek(1).tokenType == TokenType::closePara){
-                                expect(TokenType::closePara);
+                      
+                                
+                            if(_lexer.peek(1).tokenType == TokenType::bas){
+                                expect(TokenType::bas);
 
                                 if(_lexer.peek(1).tokenType == TokenType::karo){
-                                
+
                                     expect(TokenType::karo);
+                                    return true;
 
-
-                                    if(Stmts()) {
-                                        
-                                        if(_lexer.peek(1).tokenType == TokenType::bas){
-                                            expect(TokenType::bas);
-
-                                            if(_lexer.peek(1).tokenType == TokenType::karo){
-                                                expect(TokenType::karo);
-                                                return true;
-                                            }
-                                            
-                                        }
-                                        
-                                    }
-                                    
+                                }else{
+                                    expect(TokenType::karo);
                                 }
+                                
+                            }else{
+                                expect(TokenType::bas);
                             }
-
+                                
+                            
+                            
+                        }else{
+                             expect(TokenType::karo);
                         }
+
+                    }else{
+                        expect(TokenType::closePara);
                     }
+
+                    
+
+                }else{
+                    expect(TokenType::RO);
                 }
+                
 
             }
+
+        }else{
+            expect(TokenType::tak);
         }
 
     }
 
-    return false;
-    
+
     
 }
                             
@@ -1026,7 +1083,7 @@ bool parser :: K() {
         
     }
 
-    return false;
+
 }
 
 

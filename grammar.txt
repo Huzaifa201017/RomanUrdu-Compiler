@@ -32,9 +32,9 @@ DataType -> adad
 
 |------------------------------------- Variable Declaration / Initialization ---------------------------|
 
-V -> rakho ID@DataType B; Comment
-B -> ASSIGN O | ^
-O -> E | FC
+V -> rakho ID@DataType B Comment
+B -> ASSIGN O | ;
+O -> E; | FC
 Comment -> cmnt | ^
 
 
