@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.ru": "raw",
-        "iostream": "cpp",
-        "vector": "cpp",
-        "iosfwd": "cpp",
-        "ostream": "cpp"
-    }
-}
