@@ -7,22 +7,13 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	parser p("sample_code.ru");
-	p.Start();
+	
 	//asking for file name as command line arguments
 	if (argc == 2)
 	{
-		
-		
-		// lexer _lexer(argv[1]);
-		// token t;
-		// t = _lexer.getNextToken();
-		
-		// while (t.tokenType != TokenType::END_OF_FILE)
-		// {
-		// 	t.Print();
-		// 	t = _lexer.getNextToken();
-		// }
+		parser p(argv[1]);
+		p.Start();
+
 		
 		
 	}

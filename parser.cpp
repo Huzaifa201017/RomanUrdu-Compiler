@@ -9,8 +9,13 @@ string reserved1[] = {
 	"pipe","colon","semi_colon","at","openPara","closePara",
 	"ID","NUM","assign","STR","RO","INPUT","OUTPUT","cmnt"
 };
-int count  = 0;
 
+
+void printTabs(int tabs){
+    for(int i=0; i< tabs; i++){
+        cout << "\t" ;
+    }
+}
 void parser::syntax_error(TokenType t)
 {
     
@@ -29,20 +34,16 @@ parser::parser(const char filename[])
     _lexer = lexer(filename);
     
     cout << "\n\nNow Analyzer...\n\n";
-    token t;
-	t = _lexer.getNextToken();
-		
-    while (t.tokenType != TokenType::END_OF_FILE)
-    {
-        t.Print();
-        t = _lexer.getNextToken();
-    }
+    this->readAndPrintAllInput();
     _lexer.setCurrentPointer(0);
+
     fout.open ("symbol_table.txt", ios::trunc); 
     fout << "ID    Type\n";
-    
+    tabsCount = 0;
     cout << "\n\nNow Parsing...\n\n";
 }
+
+
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
 {
     token t;
@@ -61,48 +62,78 @@ void parser::resetPointer()
 
 bool parser :: C() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "C\n";
+
+
+
     if (_lexer.peek(1).tokenType == TokenType::semi_colon){
 
+        tabsCount++;
+       
+        printTabs(tabsCount);
+        cout << ";\n";
+       
         expect(TokenType::semi_colon);
 
-        if (_lexer.peek(1).tokenType == TokenType::cmnt){
-            expect(TokenType::cmnt);
-        }
-        
+
+        tabsCount--;
+        Comment();
+        tabsCount++;
+
+        tabsCount--;
+        tabsCount--;
+
         return true;
         
        
     }
-    
+    tabsCount--;
     return false;
 
 }
 
 bool parser :: Comment(){
 
-    // if(_lexer.peek(1).tokenType == TokenType::cmnt){
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Comment\n";
 
-    //     return true;
 
-    // }else {
 
-    // }
-
-    // return false;
+    if (_lexer.peek(1).tokenType == TokenType::cmnt){
+        tabsCount++;
+        printTabs(tabsCount);
+        cout << "Cmnt\n";
+        expect(TokenType::cmnt);
+        tabsCount--;
+    }
+    tabsCount--;
+    return true;
 }
 
 bool parser :: E(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "E\n";
+    
+
+
     if(R())
     {
+    
         if(_E())
         {
+            tabsCount--;
             return true;
         }
 
     }
     else
     {
+        tabsCount--;
         return false;
     }
     
@@ -110,17 +141,30 @@ bool parser :: E(){
 
 bool parser :: _E(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "E'\n";
+    tabsCount++;
 
     if (_lexer.peek(1).tokenType == TokenType::plus){
+
+        printTabs(tabsCount);
+        cout << "+\n";
+
         expect(TokenType::plus);
+        tabsCount--;
+
         if(R())
         {
+            
             if(_E())
             {
+                tabsCount--;
                 return true;
             }
             else
             {
+                tabsCount--;
                 return false;
             }
             
@@ -128,29 +172,36 @@ bool parser :: _E(){
         }
         else
         {
+            tabsCount--;
             expect(TokenType::plus);
             return false;
         }
-        
 
     }
     else if (_lexer.peek(1).tokenType == TokenType::minus) {
         
         expect(TokenType::minus);
 
+        printTabs(tabsCount);
+        cout << "-\n";
+
+        tabsCount--;
         if(R())
         {
             if(_E())
             {
+                tabsCount--;
                 return true;
             }
             else
             {
+                tabsCount--;
                 return false;
             }
         }
         else
         {
+            tabsCount--;
             expect(TokenType::minus);
             return false;
         }
@@ -158,6 +209,8 @@ bool parser :: _E(){
     }
     else {
 
+        tabsCount--;
+        tabsCount--;
         return true;
     }
    
@@ -166,16 +219,22 @@ bool parser :: _E(){
 
 bool parser :: R(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "R\n";
+
     if(T())
     {
         if(_R())
         {
+            tabsCount--;
             return true;
         }
     }
     
     else
     {
+        tabsCount--;
         return false;
         
     }
@@ -186,70 +245,123 @@ bool parser :: R(){
 
 bool parser :: _R(){
     
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "R'\n";
+    tabsCount++;
+
+
     if (_lexer.peek(1).tokenType == TokenType::mul){
 
+        printTabs(tabsCount);
+        cout << "*\n";
+
+        tabsCount--;
         expect(TokenType::mul);
         T();
         _R();
+        tabsCount++;
+        tabsCount--;
+        tabsCount--;
         return true;
 
     }
     else if (_lexer.peek(1).tokenType == TokenType::div) {
-        
+        printTabs(tabsCount);
+        cout << "*\n";
         expect(TokenType::div);
-
+        
+         tabsCount--;
         T();
         _R();
+        tabsCount++;
+        tabsCount--;
+        tabsCount--;
         return true;
     }
     else if (_lexer.peek(1).tokenType == TokenType::mod) {
-        
+        printTabs(tabsCount);
+        cout << "*\n";
+
         expect(TokenType::mod);
 
+        tabsCount--;
         T();
         _R();
+        tabsCount++;
+        tabsCount--;
+        tabsCount--;
         return true;
     }
     else {
-
+        tabsCount--;
+        tabsCount--;
         return true;
     }
 
-    return false;
     
     
 }
 
 bool parser :: T() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "T\n";
+
+    tabsCount++;
+
    if (_lexer.peek(1).tokenType == TokenType::ID){
+
+        printTabs(tabsCount);
+        cout << "ID\n";
+        tabsCount--;
+        tabsCount--;
 
        expect(TokenType::ID);
        return true;
    }
    else if (_lexer.peek(1).tokenType == TokenType::NUM){
+
+        printTabs(tabsCount);
+        cout << "NUM\n";
+        tabsCount--;
+        tabsCount--;
         
         expect(TokenType::NUM);
         return true;
 
    }
    else if (_lexer.peek(1).tokenType == TokenType::openPara ){
-     
+        
+        printTabs(tabsCount);
+        cout << "openPara\n";
+
+        tabsCount--;
+        
         expect(TokenType::openPara);
 
         E();
+        tabsCount++;
 
         if (_lexer.peek(1).tokenType == TokenType::closePara ){
-                
+            printTabs(tabsCount);
+            cout << "closedPara\n";
+            tabsCount--;
+            tabsCount--;
             expect(TokenType::closePara);
             return true;
         }
         else {
+           
             expect(TokenType::closePara);
         }
         
 
    }else {
+
+        tabsCount--;
+        tabsCount--;
        //expect(TokenType::ID);
       return false;
    }
@@ -259,42 +371,79 @@ bool parser :: T() {
 
 bool parser :: F() {    
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "F\n";
+
+    tabsCount++;
 
     if (_lexer.peek(1).tokenType==TokenType::kaam)
     {
+    
+        printTabs(tabsCount);
+        cout << "Kaam\n";
+
         expect(TokenType::kaam);
+        tabsCount--;
         Func();
+        tabsCount++;
 
         if(_lexer.peek(1).tokenType==TokenType::at) {
 
+            printTabs(tabsCount);
+            cout << "at\n";
+
             expect(TokenType::at);
-            
+            tabsCount--;
             Functype();
+            tabsCount++;
 
             if (_lexer.peek(1).tokenType==TokenType::openPara)
             {
+                printTabs(tabsCount);
+                cout << "openPara\n";
+
                 expect(TokenType::openPara);
+                tabsCount--;
                 P();
+                tabsCount++;
 
                 
                 if (_lexer.peek(1).tokenType==TokenType::closePara)
                 {
+                    printTabs(tabsCount);
+                    cout << "closePara\n";
+
                     expect(TokenType::closePara);
 
                     if (_lexer.peek(1).tokenType==TokenType::karo)
                     {
+                        printTabs(tabsCount);
+                        cout << "karo\n";
+
                         expect(TokenType::karo);
 
+                        tabsCount--;
+
                         Stmts();
+                        tabsCount++;
 
 
                         if (_lexer.peek(1).tokenType==TokenType::kaam)
                         {
+                            printTabs(tabsCount);
+                            cout << "kaam\n";
+
                             expect(TokenType::kaam);
 
                             if (_lexer.peek(1).tokenType==TokenType::khatam)
                             {
+                                printTabs(tabsCount);
+                                cout << "Khatam\n";
+                                tabsCount--;
+
                                 expect(TokenType::khatam);
+                                tabsCount--;
                                 return true;
 
                             }else{
@@ -302,7 +451,7 @@ bool parser :: F() {
                             }
                             
                             
-                        }else{
+                        }else {
                             expect(TokenType::kaam);
                         }
 
@@ -330,16 +479,24 @@ bool parser :: F() {
 
         
     }
-    
+    tabsCount--;
     return false;
     
 }
 
 bool parser :: Func() {
 
-    
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Func\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::markazi)
     {
+        printTabs(tabsCount);
+        cout << "markazi\n";
+        tabsCount--;
+        tabsCount--;
         this->id = "markazi";
         expect(TokenType::markazi);
 
@@ -349,26 +506,41 @@ bool parser :: Func() {
     }
     else if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        printTabs(tabsCount);
+        cout << "ID\n";
+        tabsCount--;
+        tabsCount--;
+
         this->id = _lexer.peek(1).lexeme;
         expect(TokenType::ID);
 
 
        return true;
     }
-
+    tabsCount--;
+    tabsCount--;
     expect(TokenType::markazi);
     return false;
     
 }
 
 bool parser :: Functype() {
+
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Functype\n";
+    tabsCount++;
     
     if (_lexer.peek(1).tokenType == TokenType::adad)
     {
+        printTabs(tabsCount);
+        cout << "adad\n";
+        tabsCount--;
+        tabsCount--;
+
+         
         fout << id << " " << "adad\n";
-        cout << id << " " << "adad\n";
-        
-        //count++;
+    
 
        
         expect(TokenType::adad);
@@ -377,11 +549,18 @@ bool parser :: Functype() {
     }
     else if (_lexer.peek(1).tokenType == TokenType::khali)
     {
+        printTabs(tabsCount);
+        cout << "khali\n";
+        tabsCount--;
+        tabsCount--;
+
         fout << id << " " << "khali\n";
         expect(TokenType::khali);
         return true;
     }
     
+    tabsCount--;
+    tabsCount--;
     expect(TokenType::adad);
     return false;
     
@@ -391,16 +570,33 @@ bool parser :: Functype() {
 bool parser :: P(){
     
     
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "P\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        printTabs(tabsCount);
+        cout << "ID\n";
+       
+
+        this->id = _lexer.peek(1).lexeme;
         expect(TokenType::ID);
+
         if (_lexer.peek(1).tokenType == TokenType::at)
         {
-            expect(TokenType::at);
+            printTabs(tabsCount);
+            cout << "at\n";
 
+            expect(TokenType::at);
+            tabsCount--;
             Datatype() ;
             A();
-
+            tabsCount++;
+            
+            tabsCount--;
+            tabsCount--;
         
             return true;
             
@@ -413,27 +609,50 @@ bool parser :: P(){
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
        return true;
     }
     
 }
 
+
 bool parser :: A(){
     
-    
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "A\n";
+    tabsCount++;
+
     if(_lexer.peek(1).tokenType == TokenType::pipe)
     {
         expect(TokenType::pipe);
 
+        printTabs(tabsCount);
+        cout << "pipe\n";
+
         if (_lexer.peek(1).tokenType == TokenType::ID)
         {
+            this->id = _lexer.peek(1).lexeme;
             expect(TokenType::ID);
+
+            printTabs(tabsCount);
+            cout << "ID\n";
 
             if (_lexer.peek(1).tokenType == TokenType::at)
             {
+                printTabs(tabsCount);
+                cout << "at\n";
+
                 expect(TokenType::at);
+
+                tabsCount--;
                 Datatype();
                 A();
+                tabsCount++;
+
+                tabsCount--;
+                tabsCount--;
                 return true;
             
             }else{
@@ -449,15 +668,30 @@ bool parser :: A(){
     }
     else
     {
-       return true;
+        printTabs(tabsCount);
+        cout << "^\n";
+        tabsCount--;
+        tabsCount--;
+        return true;
     }
     
 }
 
 bool parser :: Datatype(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Datatype\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::adad ){
         fout << id << " " << "adad\n";
+
+        printTabs(tabsCount);
+        cout << "adad\n";
+        tabsCount--;
+        tabsCount--;
+
         expect(TokenType::adad);
         return true;
 
@@ -465,49 +699,70 @@ bool parser :: Datatype(){
         expect(TokenType::adad);
     }
 
+    tabsCount--;
+    tabsCount--;
     return false;
 }
 
 bool parser :: V() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "V\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::rakho ){
         expect(TokenType::rakho);
 
+        printTabs(tabsCount);
+        cout << "rakho\n";
+
          if (_lexer.peek(1).tokenType == TokenType::ID ){
+
             this->id = _lexer.peek(1).lexeme;
             expect(TokenType::ID);
 
-             if (_lexer.peek(1).tokenType == TokenType::at ){
-                    expect(TokenType::at);
+            printTabs(tabsCount);
+            cout << "ID\n";
 
-                    if (Datatype()){
+            if (_lexer.peek(1).tokenType == TokenType::at ){
+                expect(TokenType::at);
+                
+                printTabs(tabsCount);
+                cout << "at\n";
 
-                        if(B()){
+                tabsCount--;
 
+                if (Datatype()){
+                    
+
+                    if(B()){
+                        tabsCount++;
+
+                        
                             
-                                
-                            if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                                expect(TokenType::cmnt);
-                                return true;
-                            }
-                            else
-                            {
-                                return true;
-                            
-                            }
+                        tabsCount--;
+
+                        Comment();
+
+                        tabsCount++;
+
+                        tabsCount--;
+                        tabsCount--;
+                        return true;
 
 
-                            
-                        }
+                        
                     }
+                }
 
 
                     
-             }
-             else
-             {
+            }
+            else
+            {
                 expect(TokenType::at);
-             }
+            }
              
 
         
@@ -521,39 +776,59 @@ bool parser :: V() {
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return false;
     }
     
 
         
 
- }
+}
         
 
 
 bool parser :: B() {
 
-    if (_lexer.peek(1).tokenType == TokenType::assign ){
-        
-        expect(TokenType::assign);
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "B\n";
+    tabsCount++;
 
+    if (_lexer.peek(1).tokenType == TokenType::assign ){
+        printTabs(tabsCount);
+        cout << ":=\n";
+
+        expect(TokenType::assign);
+        tabsCount--;
         if ( O()) {
+            tabsCount++;
+            tabsCount--;
+            tabsCount--;
             return true;
         }
         else
         {
-            
+            tabsCount--;
+            tabsCount--;
             return false;
         }
         
     }
     else if(_lexer.peek(1).tokenType == TokenType::semi_colon)
     {
+        printTabs(tabsCount);
+        cout << ";\n";
+        tabsCount--;
+        tabsCount--;
+
         expect(TokenType::semi_colon);
         return true;
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return false;
     }
     
@@ -561,22 +836,39 @@ bool parser :: B() {
 
 bool parser :: O() {
 
-    if (E()){
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "O\n";
+   
+
+    
+    if (E()) {
+
+        tabsCount++;
         if (_lexer.peek(1).tokenType == TokenType::semi_colon)
         {
+            printTabs(tabsCount);
+            cout << ";\n";
+            tabsCount--;
+            tabsCount--;
             expect(TokenType::semi_colon);
             return true;
         }else
         {
+            tabsCount--;
+            tabsCount--;
             expect(TokenType::semi_colon);
         }
         
     }else if(FC())
     {
+        tabsCount--;
+
         return true;
     }
     else
     {
+        tabsCount--;
         
         return false;
     }
@@ -586,36 +878,58 @@ bool parser :: O() {
 
 bool parser :: FC(){
     
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "O\n";
+    tabsCount++;
     
     if (_lexer.peek(1).tokenType == TokenType::chalao)
     {
+        printTabs(tabsCount);
+        cout << "chalao\n";
         expect(TokenType::chalao);
         
         if (_lexer.peek(1).tokenType == TokenType::ID)
         {
+            printTabs(tabsCount);
+            cout << "ID\n";
+
             expect(TokenType::ID);
 
             if (_lexer.peek(1).tokenType == TokenType::openPara)
             {
-                expect(TokenType::openPara);
+                printTabs(tabsCount);
+                cout << "openPara\n";
 
+                expect(TokenType::openPara);
+                tabsCount--;
                 Z();
-              
+                tabsCount++;
 
                 if (_lexer.peek(1).tokenType == TokenType::closePara)
                 {
                     expect(TokenType::closePara);
+
+                    printTabs(tabsCount);
+                    cout << "closePara\n";
                     
                     if (_lexer.peek(1).tokenType == TokenType::semi_colon)
                     {
+                        printTabs(tabsCount);
+                        cout << ";\n";
                         expect(TokenType::semi_colon);
 
-                        if (_lexer.peek(1).tokenType == TokenType::cmnt){
-                            expect(TokenType::cmnt);
-                        }
+                        tabsCount--;
+
+                        Comment();
+
+                        tabsCount++;
+
+                        tabsCount--;
+                        tabsCount--;
                         return true;
                     
-                    }else{
+                    } else{
                         expect(TokenType::semi_colon);
                     }
                     
@@ -638,43 +952,54 @@ bool parser :: FC(){
         }
         
     }
-    
+    tabsCount--;
+    tabsCount--;
     return false;
     
 }
 
 bool parser :: Z(){
     
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "O\n";
+    
     if(E())
     {
         U();
+        tabsCount--;
     }
     else
     {
+        tabsCount--;
         return true;
     }
    
-   
-   
-    
-    
-    
-    
 }
 
 bool parser :: U(){
     
     
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "U\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::pipe)
     {
+        printTabs(tabsCount);
+        cout << "|\n";
         expect(TokenType::pipe);
+        tabsCount--;
         E();
         U();
+        tabsCount--;
         return true;
        
     }
     else {
-
+        tabsCount--;
+        tabsCount--;
         return true;
     }
     
@@ -682,31 +1007,54 @@ bool parser :: U(){
 
 bool parser :: print(){
     
-   
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "print\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::dekhao)
     {
+        printTabs(tabsCount);
+        cout << "dekhao\n";
+
         expect(TokenType::dekhao);
+
         if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
         {
+            printTabs(tabsCount);
+            cout << "<<\n";
             expect(TokenType::OUTPUT);
+
+            tabsCount--;
 
             if(G()) {
 
                 if(H()) {
+                    tabsCount++;
 
                     if (_lexer.peek(1).tokenType == TokenType::semi_colon)
                     {
+                        printTabs(tabsCount);
+                        cout << ";\n";
+
                         expect(TokenType::semi_colon);
 
-                        if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                            expect(TokenType::cmnt);
-                        }
+                        tabsCount--;
+
+                        Comment();
+
+                        tabsCount++;
+
+                        tabsCount--;
+                        tabsCount--;
+
 
                         return true;
                         
                     }
                     else
                     {
+              
                         expect(TokenType::semi_colon);
                     }
 
@@ -723,6 +1071,8 @@ bool parser :: print(){
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return false;
     }
     
@@ -730,24 +1080,36 @@ bool parser :: print(){
 
 bool parser :: H(){
     
-    
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "H\n";
+    tabsCount++;
+
     if(_lexer.peek(1).tokenType == TokenType::OUTPUT)
     {
+        printTabs(tabsCount);
+        cout << "<<\n";
         expect(TokenType::OUTPUT);
+        tabsCount--;
         if(G()){
 
             if(H()){
+                tabsCount--;
 
                 return true;
                 
             }
         }
+        
+        tabsCount--;
        
        return false;
         
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return true;
     }
 
@@ -756,15 +1118,29 @@ bool parser :: H(){
 bool parser :: G(){
     
     // G -> str | E
+
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "G\n";
+    
+
     if (_lexer.peek(1).tokenType == TokenType::STR)
     {
+        tabsCount++;
+        printTabs(tabsCount);
+        cout << "STR\n";
         expect(TokenType::STR);
+        tabsCount--;
+        tabsCount--;
+
         return true;
     }
     else if (E())
     {
+        tabsCount--;
         return true;
     }
+    tabsCount--;
    
     return false;
     
@@ -773,36 +1149,64 @@ bool parser :: G(){
 
 bool parser :: input(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "input\n";
+    tabsCount++;
+
     // input -> lo H >> Var I ;
     if(_lexer.peek(1).tokenType == TokenType::lo)
     {
+        printTabs(tabsCount);
+        cout << "lo\n";
         expect(TokenType::lo);
        
-        if (H() && _lexer.peek(1).tokenType == TokenType::INPUT)
+        tabsCount--;
+        if (H())
         {
-            expect(TokenType::INPUT);
+            tabsCount++;
 
-            if(Var() && I()){
+            if(_lexer.peek(1).tokenType == TokenType::INPUT){
 
-                if (_lexer.peek(1).tokenType == TokenType::semi_colon)
-                {
-                    expect(TokenType::semi_colon);
+                printTabs(tabsCount);
+                cout << ">>\n";
 
-                    if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                        expect(TokenType::cmnt);
+                tabsCount--;
+                expect(TokenType::INPUT);
+
+                if(Var() && I()){
+                    tabsCount++;
+
+                  
+
+                    if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+                    {
+                        printTabs(tabsCount);
+                        cout << ";\n";
+
+                        expect(TokenType::semi_colon);
+
+                        tabsCount--;
+
+                        Comment();
+
+                        tabsCount++;
+                        
+                        tabsCount--;
+                        tabsCount--;
+                        
+                        return true;
+                        
+
+                    }
+                    else
+                    {
+                        expect(TokenType::semi_colon);
                     }
                     
-                    return true;
                     
 
                 }
-                else
-                {
-                    expect(TokenType::semi_colon);
-                }
-                
-                
-
             }
           
             
@@ -815,6 +1219,8 @@ bool parser :: input(){
        
         
     }
+    tabsCount--;
+    tabsCount--;
     return false;
     
     
@@ -822,20 +1228,29 @@ bool parser :: input(){
 
 bool parser :: I(){
 
-    // I -> >> Var I | ^
+
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "I\n";
+
     if (_lexer.peek(1).tokenType == TokenType::INPUT)
     {
+        tabsCount++;
         expect(TokenType::INPUT);
-
+        tabsCount--;
         if(Var() && I()){
+            tabsCount--;
             return true;
         }
+
+        tabsCount--;
 
         return false;
 
     }
     else
     {
+        tabsCount--;
         return true;
     }
     
@@ -843,35 +1258,58 @@ bool parser :: I(){
 
 bool parser :: Var(){
 
-    // Var  -> ID | ID@DataTypef
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Var\n";
+    
+
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        tabsCount++;
+        printTabs(tabsCount);
+        cout << "ID\n";
+
         expect(TokenType::ID);
+        tabsCount--;
 
         if(J()){
+            tabsCount--;
             return true;
 
         }
        
     }
+    tabsCount--;
     return false;
     
 }
 
 bool parser :: J(){
 
-    // J -> @DataType | ^
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "J\n";
+    
+    
     if (_lexer.peek(1).tokenType == TokenType::at)
     {
+        tabsCount++;
+        printTabs(tabsCount);
+        cout << "at\n";
+
         expect(TokenType::at);
+        tabsCount--;
         if(Datatype()){
+            
+            tabsCount--;
             return true;
         }
-        
+        tabsCount--;
         return false;
     }
     else
     {
+        tabsCount--;
         return true;
     }
     
@@ -879,47 +1317,100 @@ bool parser :: J(){
 
 bool parser :: Conditional() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Conditional\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::agar ){
+        
+        printTabs(tabsCount);
+        cout << "agar\n";
 
         expect(TokenType::agar);
 
         if(_lexer.peek(1).tokenType == TokenType::openPara){
 
+            printTabs(tabsCount);
+            cout << "openPara\n";
+
             expect(TokenType::openPara);
+
+            tabsCount--;
             E();
+            tabsCount++;
             
 
             if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
+                printTabs(tabsCount);
+                cout << "RO\n";
+
                 expect(TokenType::RO);
 
+                tabsCount--;
                 E();
+                tabsCount++;
                
 
                 if(_lexer.peek(1).tokenType == TokenType::closePara){
 
+                    printTabs(tabsCount);
+                    cout << "closePara\n";
+
                     expect(TokenType::closePara);
 
                     if(_lexer.peek(1).tokenType == TokenType::to){
+
+                        printTabs(tabsCount);
+                        cout << "to\n";
+
                         expect(TokenType::to);
 
-                        if(_lexer.peek(1).tokenType == TokenType::phir){
+
+
+                        if(_lexer.peek(1).tokenType == TokenType::phir) {
+
+                            printTabs(tabsCount);
+                            cout << "phir\n";
+
                             expect(TokenType::phir);
 
                             if(_lexer.peek(1).tokenType == TokenType::karo){
+                                
+                                printTabs(tabsCount);
+                                cout << "karo\n";
+
                                 expect(TokenType::karo);
+
+                                tabsCount--;
 
                                 Stmts();
                                 ElseIf();
                                 Else();
+
+                                tabsCount++;
                                
                              
 
                                 if(_lexer.peek(1).tokenType == TokenType::bas){
+
+                                    printTabs(tabsCount);
+                                    cout << "bas\n";
+
                                     expect(TokenType::bas);
 
+
+
                                     if(_lexer.peek(1).tokenType == TokenType::karo){
+
+                                        printTabs(tabsCount);
+                                        cout << "karo\n";
+
                                         expect(TokenType::karo);
+
+                                        tabsCount--;
+                                        tabsCount--;
 
                                         return true;
 
@@ -966,6 +1457,8 @@ bool parser :: Conditional() {
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return false;
     }
     
@@ -975,38 +1468,81 @@ bool parser :: Conditional() {
 
 bool parser :: ElseIf() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "ElseIf\n";
+    tabsCount++;
+
     if(_lexer.peek(1).tokenType == TokenType::warna){
+
+        printTabs(tabsCount);
+        cout << "warna\n";
+
         expect(TokenType::warna);
 
         if(_lexer.peek(1).tokenType == TokenType::agar){
+
+            printTabs(tabsCount);
+            cout << "agar\n";
+
             expect(TokenType::agar);
 
             if(_lexer.peek(1).tokenType == TokenType::openPara){
 
+                printTabs(tabsCount);
+                cout << "openPara\n";
+
                 expect(TokenType::openPara);
+
+                tabsCount--;
                 E();
+                tabsCount++;
                
 
                 if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
+                    printTabs(tabsCount);
+                    cout << "RO\n";
+
                     expect(TokenType::RO);
+
+                    tabsCount--;
                     E();
+                    tabsCount++;
                  
 
                     if(_lexer.peek(1).tokenType == TokenType::closePara){
+
+                        printTabs(tabsCount);
+                        cout << "closePara\n";
+
                         expect(TokenType::closePara);
 
                         if(_lexer.peek(1).tokenType == TokenType::to){
+
+                            printTabs(tabsCount);
+                            cout << "to\n";
                         
                             expect(TokenType::to);
 
 
                             if(_lexer.peek(1).tokenType == TokenType::phir){
+
+                                printTabs(tabsCount);
+                                cout << "phir\n";
+
                                 
                                 expect(TokenType::phir);
 
+                                tabsCount--;
                                 Stmts();
-                                return ElseIf();
+                               
+                                bool x = ElseIf();
+                                tabsCount++;
+
+                                tabsCount--;
+                                tabsCount--;
+                                return x;
                                 
                             }else{
                                 expect(TokenType::to);
@@ -1036,6 +1572,8 @@ bool parser :: ElseIf() {
 
         }
         else{
+            tabsCount--;
+            tabsCount--;
             _lexer.setCurrentPointer(_lexer.getCurrentPointer()-1);
             return false;
         }
@@ -1045,19 +1583,41 @@ bool parser :: ElseIf() {
     }
     else {
 
+        tabsCount--;
+        tabsCount--;
+
+
         return true;
     }
 }
 
 bool parser :: Else() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Else\n";
+    tabsCount++;
+
     if(_lexer.peek(1).tokenType == TokenType::warna){
+
+        printTabs(tabsCount);
+        cout << "warna\n";
+
         expect(TokenType::warna);
 
         if(_lexer.peek(1).tokenType == TokenType::phir){
+
+            printTabs(tabsCount);
+            cout << "phir\n";
+
             expect(TokenType::phir);
+
+            tabsCount--;
             Stmts();
+            tabsCount++;
           
+            tabsCount--;
+            tabsCount--;
 
             return true;
             
@@ -1071,6 +1631,9 @@ bool parser :: Else() {
     }
     else{
 
+        tabsCount--;
+        tabsCount--;
+
         return true;
     }
 
@@ -1078,42 +1641,85 @@ bool parser :: Else() {
 
 bool parser :: While() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "While\n";
+    tabsCount++;
+
+
     if(_lexer.peek(1).tokenType == TokenType::jab) {
+
+        printTabs(tabsCount);
+        cout << "Jab\n";
 
         expect(TokenType::jab);
 
         if(_lexer.peek(1).tokenType == TokenType::tak) {
 
+            printTabs(tabsCount);
+            cout << "tak\n";
+
             expect(TokenType::tak);
 
             if(_lexer.peek(1).tokenType == TokenType::openPara){
 
+                printTabs(tabsCount);
+                cout << "openPara\n";
+
                 expect(TokenType::openPara);
+
+                tabsCount--;
                 E();
+                tabsCount++;
                
 
                 if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
+                    printTabs(tabsCount);
+                    cout << "RO\n";
+
                     expect(TokenType::RO);
+
+                    tabsCount--;
                     E();
+                    tabsCount++;
                    
 
                     if(_lexer.peek(1).tokenType == TokenType::closePara){
+
+                        printTabs(tabsCount);
+                        cout << "closePara\n";
+
                         expect(TokenType::closePara);
 
                         if(_lexer.peek(1).tokenType == TokenType::karo){
+
+                            printTabs(tabsCount);
+                            cout << "karo\n";
                         
                             expect(TokenType::karo);
+
+                            tabsCount--;
                             
                             Stmts();
+                            tabsCount++;
 
                       
                                 
                             if(_lexer.peek(1).tokenType == TokenType::bas){
+
+                                printTabs(tabsCount);
+                                cout << "bas\n";
+
                                 expect(TokenType::bas);
 
                                 if(_lexer.peek(1).tokenType == TokenType::karo){
 
+                                    printTabs(tabsCount);
+                                    cout << "karo\n";
+
+                                    tabsCount--;
+                                    tabsCount--;
                                     expect(TokenType::karo);
                                     return true;
 
@@ -1151,6 +1757,8 @@ bool parser :: While() {
     }
     else
     {
+        tabsCount--;
+        tabsCount--;
         return false;
     }
     
@@ -1161,19 +1769,35 @@ bool parser :: While() {
                             
 bool parser :: K() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "K\n";
+    tabsCount++;
+
     if (_lexer.peek(1).tokenType == TokenType::ID ) {
+
+        printTabs(tabsCount);
+        cout << "ID\n";
+        
         expect(TokenType::ID);
+
+        tabsCount--;
         B();
+        tabsCount++;
         
         if (_lexer.peek(1).tokenType == TokenType::cmnt){
             expect(TokenType::cmnt);
 
         }
+
+        tabsCount--;
+        tabsCount--;
         return true;
             
         
     }
-
+    tabsCount--;
+    tabsCount--;
     return false;
 }
 
@@ -1184,51 +1808,73 @@ bool parser :: Stmts() {
         return true;
     }
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Stmts\n";
+    
+
     if(Stmt()) {
 
-       return Stmts();
+       bool x = Stmts();
+       tabsCount--;
+       return x;
     }
     else {
-
+        tabsCount--;
         return true;
-
-
-        // if(_lexer.peek(1).tokenType != TokenType::END_OF_FILE){
-            
-        //     //expect(TokenType::ERROR);
-            
-        //     return false;
-
-        // }
 
     }
 }
 
 bool parser :: W(){
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "W\n";
+    
+    tabsCount++;
+
     if(_lexer.peek(1).tokenType == TokenType::wapas) {
         expect(TokenType::wapas);
+
+        printTabs(tabsCount);
+        cout << "wapas\n";
 
         if(_lexer.peek(1).tokenType == TokenType::bhaijo) {
             expect(TokenType::bhaijo);
 
-            if(E()){
+            printTabs(tabsCount);
+            cout << "bhaijo\n";
+
+            tabsCount--;
+
+            if(E()) {
+
+                tabsCount++;
 
                 if(_lexer.peek(1).tokenType == TokenType::semi_colon) {
                     expect(TokenType::semi_colon);
 
-                    if(_lexer.peek(1).tokenType == TokenType::cmnt) {
-                        expect(TokenType::cmnt);
+                    printTabs(tabsCount);
+                    cout << "semi_colon\n";
 
-                        
-                    }
+                    tabsCount--;
+
+                    Comment();
+
+                    tabsCount++;
+
+                    tabsCount--;
+                    tabsCount--;
+
                     return true;
                     
-                }else{
+                }else {
                     expect(TokenType::semi_colon);
                 }
 
             }else{
+                tabsCount++;
                 syntax_error(_lexer.peek(1).tokenType);
                 return false;
             }
@@ -1239,60 +1885,79 @@ bool parser :: W(){
             expect(TokenType::bhaijo);
         }
     }
+    tabsCount--;
+    tabsCount--;
 }
 
 bool parser :: Stmt() {
 
+
     int i = _lexer.getCurrentPointer();
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Stmt\n";
 
     if( C() ) {
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
     if( V() ) {
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
     if(FC()) {
+        tabsCount--;
         return true;
     }
 
     if(W()){
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
 
     if(print()){
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
     if(input()){
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
     if(Conditional()){
+        tabsCount--;
         return true;
     }
      _lexer.setCurrentPointer(i);
     if(While()) {
+        tabsCount--;
         return true;
     }
     _lexer.setCurrentPointer(i);
     if(K()){
+        tabsCount--;
         return true;
     }
     _lexer.setCurrentPointer(i);
-   
+
+    tabsCount--;
     return false;
 }
 
 
 bool parser :: Start() {
 
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Start\n";
+
     if(_lexer.peek(1).tokenType == TokenType::END_OF_FILE) {
         
         fout.close();
-
         return true;
     }
     if( F() ) {
@@ -1311,25 +1976,3 @@ bool parser :: Start() {
     
 
 }
-
-//this function is for sample purposes only
-/*
-bool parser::statements()
-{
-    //statements-- > COLON LPAREN start RPAREN
-    if (_lexer.peek(1).tokenType == TokenType::COLON)
-    {
-        expect(TokenType::COLON);
-        if (_lexer.peek(1).tokenType == TokenType::LPAREN)
-        {
-            expect(TokenType::LPAREN);
-            start();
-            if (_lexer.peek(1).tokenType == TokenType::RPAREN)
-            {
-                expect(TokenType::RPAREN);
-                return true;
-            }
-        }
-    }
-    return false;
-}*/ 

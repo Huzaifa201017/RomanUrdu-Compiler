@@ -9,7 +9,7 @@ string reserved1[] = {
 	"pipe","colon","semi_colon","at","openPara","closePara",
 	"ID","NUM","assign","STR","RO","INPUT","OUTPUT","cmnt"
 };
-
+int count  = 0;
 
 void parser::syntax_error(TokenType t)
 {
@@ -38,6 +38,9 @@ parser::parser(const char filename[])
         t = _lexer.getNextToken();
     }
     _lexer.setCurrentPointer(0);
+    fout.open ("symbol_table.txt", ios::trunc); 
+    fout << "ID    Type\n";
+    
     cout << "\n\nNow Parsing...\n\n";
 }
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
@@ -62,9 +65,7 @@ bool parser :: C() {
 
         expect(TokenType::semi_colon);
 
-        if (_lexer.peek(1).tokenType == TokenType::cmnt){
-            expect(TokenType::cmnt);
-        }
+        Comment();
         
         return true;
         
@@ -77,66 +78,116 @@ bool parser :: C() {
 
 bool parser :: Comment(){
 
-    // if(_lexer.peek(1).tokenType == TokenType::cmnt){
+   if(_lexer.peek(1).tokenType == TokenType::cmnt) {
+        expect(TokenType::cmnt);
 
-    //     return true;
+        
+    }
 
-    // }else {
-
-    // }
-
-    // return false;
+    return true;
 }
 
-void parser :: E(){
+bool parser :: E(){
 
-    R();
-    _E();
+    if(R())
+    {
+        if(_E())
+        {
+            return true;
+        }
 
+    }
+    else
+    {
+        return false;
+    }
+    
 }
 
-void parser :: _E(){
+bool parser :: _E(){
 
 
     if (_lexer.peek(1).tokenType == TokenType::plus){
         expect(TokenType::plus);
-        R();
-        _E();
+        if(R())
+        {
+            if(_E())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
 
-
+        }
+        else
+        {
+            expect(TokenType::plus);
+            return false;
+        }
+        
 
     }
     else if (_lexer.peek(1).tokenType == TokenType::minus) {
         
         expect(TokenType::minus);
 
-        R();
-        _E();
+        if(R())
+        {
+            if(_E())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            expect(TokenType::minus);
+            return false;
+        }
+        
     }
     else {
-        ;
+
+        return true;
     }
    
     
 }
 
-void parser :: R() {
+bool parser :: R(){
 
-    T();
-    _R();
-
+    if(T())
+    {
+        if(_R())
+        {
+            return true;
+        }
+    }
+    
+    else
+    {
+        return false;
+        
+    }
+    
 
 
 }
 
-void parser :: _R(){
+bool parser :: _R(){
     
     if (_lexer.peek(1).tokenType == TokenType::mul){
 
         expect(TokenType::mul);
-        
         T();
         _R();
+        return true;
 
     }
     else if (_lexer.peek(1).tokenType == TokenType::div) {
@@ -145,6 +196,7 @@ void parser :: _R(){
 
         T();
         _R();
+        return true;
     }
     else if (_lexer.peek(1).tokenType == TokenType::mod) {
         
@@ -152,27 +204,29 @@ void parser :: _R(){
 
         T();
         _R();
-
+        return true;
     }
     else {
-        ;
+
+        return true;
     }
+
+    return false;
     
     
 }
 
-void parser :: T() {
-
+bool parser :: T() {
 
    if (_lexer.peek(1).tokenType == TokenType::ID){
 
        expect(TokenType::ID);
-
-
+       return true;
    }
    else if (_lexer.peek(1).tokenType == TokenType::NUM){
         
         expect(TokenType::NUM);
+        return true;
 
    }
    else if (_lexer.peek(1).tokenType == TokenType::openPara ){
@@ -184,13 +238,18 @@ void parser :: T() {
         if (_lexer.peek(1).tokenType == TokenType::closePara ){
                 
             expect(TokenType::closePara);
+            return true;
         }
         else {
             expect(TokenType::closePara);
         }
         
 
+   }else {
+       //expect(TokenType::ID);
+      return false;
    }
+  
    
 }
 
@@ -202,7 +261,7 @@ bool parser :: F() {
         expect(TokenType::kaam);
         Func();
 
-        if(_lexer.peek(1).tokenType==TokenType::at){
+        if(_lexer.peek(1).tokenType==TokenType::at) {
 
             expect(TokenType::at);
             
@@ -211,10 +270,9 @@ bool parser :: F() {
             if (_lexer.peek(1).tokenType==TokenType::openPara)
             {
                 expect(TokenType::openPara);
-
                 P();
 
-
+                
                 if (_lexer.peek(1).tokenType==TokenType::closePara)
                 {
                     expect(TokenType::closePara);
@@ -235,75 +293,103 @@ bool parser :: F() {
                                 expect(TokenType::khatam);
                                 return true;
 
+                            }else{
+                                expect(TokenType::khatam);
                             }
                             
                             
+                        }else{
+                            expect(TokenType::kaam);
                         }
- 
+
                         
+                        
+                        
+                    }else {
+                        expect(TokenType::karo);
                     }
                     
                     
+                }else{
+                    expect(TokenType::closePara);
                 }
 
+            }else{
+
+                expect(TokenType::openPara);
             }
 
+        }else{
+
+            expect(TokenType::at);
         }
 
-    
-        
         
     }
-
-    syntax_error(_lexer.peek(1).tokenType);
+    
+    return false;
     
 }
 
-void parser :: Func() {
+bool parser :: Func() {
 
     
     if (_lexer.peek(1).tokenType == TokenType::markazi)
     {
-
+        this->id = "markazi";
         expect(TokenType::markazi);
+
+        return true;
         
         
     }
     else if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        this->id = _lexer.peek(1).lexeme;
         expect(TokenType::ID);
 
-    }else{
-        syntax_error(_lexer.peek(1).tokenType);
+
+       return true;
     }
-   
+
+    expect(TokenType::markazi);
+    return false;
     
 }
 
-void parser :: Functype() {
+bool parser :: Functype() {
     
     if (_lexer.peek(1).tokenType == TokenType::adad)
     {
+        fout << id << " " << "adad\n";
+        cout << id << " " << "adad\n";
+        
+        //count++;
+
+       
         expect(TokenType::adad);
+
+        return true;
     }
     else if (_lexer.peek(1).tokenType == TokenType::khali)
     {
+        fout << id << " " << "khali\n";
         expect(TokenType::khali);
-
-    }else{
-        syntax_error(_lexer.peek(1).tokenType);
+        return true;
     }
     
-   
+    expect(TokenType::adad);
+    return false;
     
 
 }
 
-void parser :: P(){
+bool parser :: P(){
     
     
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        this->id = _lexer.peek(1).lexeme;
         expect(TokenType::ID);
         if (_lexer.peek(1).tokenType == TokenType::at)
         {
@@ -311,21 +397,25 @@ void parser :: P(){
 
             Datatype() ;
             A();
+
+        
+            return true;
             
            
         }else{
             expect(TokenType::at);
         }
 
+        return false;
     }
     else
     {
-       ;
+       return true;
     }
     
 }
 
-void parser :: A(){
+bool parser :: A(){
     
     
     if(_lexer.peek(1).tokenType == TokenType::pipe)
@@ -334,43 +424,46 @@ void parser :: A(){
 
         if (_lexer.peek(1).tokenType == TokenType::ID)
         {
+            this->id = _lexer.peek(1).lexeme;
             expect(TokenType::ID);
 
             if (_lexer.peek(1).tokenType == TokenType::at)
             {
                 expect(TokenType::at);
-
                 Datatype();
                 A();
-
+                return true;
             
-            }else {
-                syntax_error(_lexer.peek(1).tokenType);
+            }else{
+                expect(TokenType::at);
             }
 
         
             
         }else{
-            syntax_error(_lexer.peek(1).tokenType);
+            expect(TokenType::ID);
         }
-
+        return false;
     }
     else
     {
-        ;
+       return true;
     }
     
 }
 
-void parser :: Datatype(){
+bool parser :: Datatype(){
 
     if (_lexer.peek(1).tokenType == TokenType::adad ){
+        fout << id << " " << "adad\n";
         expect(TokenType::adad);
-
+        return true;
 
     }else{
-        syntax_error(_lexer.peek(1).tokenType);
+        expect(TokenType::adad);
     }
+
+    return false;
 }
 
 bool parser :: V() {
@@ -378,75 +471,105 @@ bool parser :: V() {
     if (_lexer.peek(1).tokenType == TokenType::rakho ){
         expect(TokenType::rakho);
 
-        if (_lexer.peek(1).tokenType == TokenType::ID ){
-             expect(TokenType::ID);
+         if (_lexer.peek(1).tokenType == TokenType::ID ){
+            this->id = _lexer.peek(1).lexeme;
+            expect(TokenType::ID);
 
-              if (_lexer.peek(1).tokenType == TokenType::at ){
-
+             if (_lexer.peek(1).tokenType == TokenType::at ){
                     expect(TokenType::at);
 
-                    Datatype();
-                    B();
+                    if (Datatype()){
 
-                    if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                        expect(TokenType::cmnt);
+                        if(B()){
+
+                            
+                                
+                            Comment();
+
+
+                            
+                        }
                     }
+
+
                     
-                    
-                }else{
-                   syntax_error(_lexer.peek(1).tokenType);
-                }
+             }
+             else
+             {
+                expect(TokenType::at);
+             }
+             
 
         
 
-        }else{
-            syntax_error(_lexer.peek(1).tokenType);
         }
+        else
+        {
+            expect(TokenType::ID);
+        }
+        
     }
+    else
+    {
+        return false;
+    }
+    
+
+        
 
  }
         
 
 
-void parser :: B() {
+bool parser :: B() {
 
     if (_lexer.peek(1).tokenType == TokenType::assign ){
         
         expect(TokenType::assign);
-        O();
-        
 
+        if ( O()) {
+            return true;
+        }
+        else
+        {
+            
+            return false;
+        }
         
-    }else if(_lexer.peek(1).tokenType == TokenType::semi_colon)  {
-
+    }
+    else if(_lexer.peek(1).tokenType == TokenType::semi_colon)
+    {
         expect(TokenType::semi_colon);
+        return true;
     }
-    else{
-        ;
+    else
+    {
+        return false;
     }
-
     
-   
 }
 
-void parser :: O() {
+bool parser :: O() {
 
-    if (!FC()){
-        
-         E();
-    
-        if(_lexer.peek(1).tokenType == TokenType::semi_colon)  {
-
+    if (E()){
+        if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+        {
             expect(TokenType::semi_colon);
-
-        }else{
-            syntax_error(_lexer.peek(1).tokenType);
+            return true;
+        }else
+        {
+            expect(TokenType::semi_colon);
         }
-
+        
+    }else if(FC())
+    {
+        return true;
     }
-   
-   
-   
+    else
+    {
+        
+        return false;
+    }
     
 }
 
@@ -465,6 +588,7 @@ bool parser :: FC(){
             if (_lexer.peek(1).tokenType == TokenType::openPara)
             {
                 expect(TokenType::openPara);
+
                 Z();
               
 
@@ -476,9 +600,7 @@ bool parser :: FC(){
                     {
                         expect(TokenType::semi_colon);
 
-                        if (_lexer.peek(1).tokenType == TokenType::cmnt){
-                            expect(TokenType::cmnt);
-                        }
+                        Comment();
                         return true;
                     
                     }else{
@@ -509,14 +631,26 @@ bool parser :: FC(){
     
 }
 
-void parser :: Z(){
+bool parser :: Z(){
     
-    E();
-    U();
-
+    if(E())
+    {
+        U();
+    }
+    else
+    {
+        return true;
+    }
+   
+   
+   
+    
+    
+    
+    
 }
 
-void parser :: U(){
+bool parser :: U(){
     
     
     if (_lexer.peek(1).tokenType == TokenType::pipe)
@@ -524,11 +658,12 @@ void parser :: U(){
         expect(TokenType::pipe);
         E();
         U();
+        return true;
        
     }
     else {
 
-        ;
+        return true;
     }
     
 }
@@ -542,25 +677,28 @@ bool parser :: print(){
         if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
         {
             expect(TokenType::OUTPUT);
-            G();
-            H();
-          
-            if (_lexer.peek(1).tokenType == TokenType::semi_colon)
-            {
-                expect(TokenType::semi_colon);
 
-                if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                    expect(TokenType::cmnt);
+            if(G()) {
+
+                if(H()) {
+
+                    if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+                    {
+                        expect(TokenType::semi_colon);
+
+                        Comment();
+
+                        return true;
+                        
+                    }
+                    else
+                    {
+                        expect(TokenType::semi_colon);
+                    }
+
                 }
-
-                return true;
-                
             }
-            else
-            {
-                expect(TokenType::semi_colon);
-            }
-
+          
             
         }
         else
@@ -576,36 +714,45 @@ bool parser :: print(){
     
 }
 
-void parser :: H(){
+bool parser :: H(){
     
     
     if(_lexer.peek(1).tokenType == TokenType::OUTPUT)
     {
         expect(TokenType::OUTPUT);
-        G();
-        H();
+        if(G()){
+
+            if(H()){
+
+                return true;
+                
+            }
+        }
+       
+       return false;
         
     }
     else
     {
-       ;
+        return true;
     }
 
 }
 
-void parser :: G(){
+bool parser :: G(){
     
     // G -> str | E
     if (_lexer.peek(1).tokenType == TokenType::STR)
     {
         expect(TokenType::STR);
-
+        return true;
     }
-    else
+    else if (E())
     {
-        E();
-
+        return true;
     }
+   
+    return false;
     
     
 }
@@ -616,36 +763,39 @@ bool parser :: input(){
     if(_lexer.peek(1).tokenType == TokenType::lo)
     {
         expect(TokenType::lo);
-        H() ;
-        if (_lexer.peek(1).tokenType == TokenType::INPUT)
+       
+        if (H() && _lexer.peek(1).tokenType == TokenType::INPUT)
         {
             expect(TokenType::INPUT);
-            Var();
-            I();
-           
 
-            if (_lexer.peek(1).tokenType == TokenType::semi_colon)
-            {
-                expect(TokenType::semi_colon);
+            if(Var() && I()){
 
-                if (_lexer.peek(1).tokenType == TokenType::cmnt ){
-                    expect(TokenType::cmnt);
+                if (_lexer.peek(1).tokenType == TokenType::semi_colon)
+                {
+                    expect(TokenType::semi_colon);
+
+                    Comment();
+                    
+                    return true;
+                    
+
                 }
-
-                return true;
-
-            }else{
-                expect(TokenType::semi_colon);
-            }
+                else
+                {
+                    expect(TokenType::semi_colon);
+                }
+                
                 
 
-            
+            }
           
             
-        }else{
+        }
+        else
+        {
             expect(TokenType::INPUT);
         }
-       
+        
        
         
     }
@@ -654,53 +804,64 @@ bool parser :: input(){
     
 }
 
-void parser :: I(){
+bool parser :: I(){
 
     // I -> >> Var I | ^
     if (_lexer.peek(1).tokenType == TokenType::INPUT)
     {
         expect(TokenType::INPUT);
-        Var();
-        I();
+
+        if(Var() && I()){
+            return true;
+        }
+
+        return false;
 
     }
     else
     {
-        ;
+        return true;
     }
     
 }
 
-void parser :: Var(){
+bool parser :: Var(){
 
     // Var  -> ID | ID@DataTypef
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
         expect(TokenType::ID);
-        J();
 
+        if(J()){
+            return true;
+
+        }
+       
     }
-    
+    return false;
     
 }
 
-void parser :: J(){
+bool parser :: J(){
 
     // J -> @DataType | ^
     if (_lexer.peek(1).tokenType == TokenType::at)
     {
         expect(TokenType::at);
-        Datatype();
+        if(Datatype()){
+            return true;
+        }
         
+        return false;
     }
     else
     {
-       ;
+        return true;
     }
     
 }
 
-bool parser :: Conditional(){
+bool parser :: Conditional() {
 
     if (_lexer.peek(1).tokenType == TokenType::agar ){
 
@@ -715,6 +876,7 @@ bool parser :: Conditional(){
             if(_lexer.peek(1).tokenType == TokenType::RO){ 
 
                 expect(TokenType::RO);
+
                 E();
                
 
@@ -726,7 +888,7 @@ bool parser :: Conditional(){
                         expect(TokenType::to);
 
                         if(_lexer.peek(1).tokenType == TokenType::phir){
-                            expect(TokenType::to);
+                            expect(TokenType::phir);
 
                             if(_lexer.peek(1).tokenType == TokenType::karo){
                                 expect(TokenType::karo);
@@ -752,14 +914,7 @@ bool parser :: Conditional(){
                                 }else{
                                     expect(TokenType::bas);
                                 }
-                                        
-                                    
-
-                                    
-                                
-                                                    
-                                
-
+        
                                 
                             }else{
                                 expect(TokenType::karo);
@@ -782,7 +937,8 @@ bool parser :: Conditional(){
 
                 
 
-            }else{
+            }else {
+
                 expect(TokenType::RO);
             }
             
@@ -792,12 +948,16 @@ bool parser :: Conditional(){
             expect(TokenType::openPara);
         }
     }
+    else
+    {
+        return false;
+    }
+    
 
-    return false;
     
 }
 
-void parser :: ElseIf() {
+bool parser :: ElseIf() {
 
     if(_lexer.peek(1).tokenType == TokenType::warna){
         expect(TokenType::warna);
@@ -827,10 +987,10 @@ void parser :: ElseIf() {
 
                             if(_lexer.peek(1).tokenType == TokenType::phir){
                                 
-                                expect(TokenType::to);
-                                Stmts();
-                                ElseIf();
+                                expect(TokenType::phir);
 
+                                Stmts();
+                                return ElseIf();
                                 
                             }else{
                                 expect(TokenType::to);
@@ -860,18 +1020,20 @@ void parser :: ElseIf() {
 
         }
         else{
-            expect(TokenType::agar);
+            _lexer.setCurrentPointer(_lexer.getCurrentPointer()-1);
+            return false;
         }
 
         
 
     }
     else {
-        ;
+
+        return true;
     }
 }
 
-void parser :: Else() {
+bool parser :: Else() {
 
     if(_lexer.peek(1).tokenType == TokenType::warna){
         expect(TokenType::warna);
@@ -879,7 +1041,9 @@ void parser :: Else() {
         if(_lexer.peek(1).tokenType == TokenType::phir){
             expect(TokenType::phir);
             Stmts();
-        
+          
+
+            return true;
             
 
         }else{
@@ -891,7 +1055,7 @@ void parser :: Else() {
     }
     else{
 
-       ;
+        return true;
     }
 
 }
@@ -969,7 +1133,11 @@ bool parser :: While() {
         }
 
     }
-    return false;
+    else
+    {
+        return false;
+    }
+    
 
 
     
@@ -978,21 +1146,16 @@ bool parser :: While() {
 bool parser :: K() {
 
     if (_lexer.peek(1).tokenType == TokenType::ID ) {
-
+        expect(TokenType::ID);
         B();
-
-        if (_lexer.peek(1).tokenType == TokenType::cmnt){
-            expect(TokenType::cmnt);
-
-        }
+        
+        Comment();
         return true;
             
-
-
         
     }
-    return false;
 
+    return false;
 }
 
 
@@ -1003,12 +1166,55 @@ bool parser :: Stmts() {
     }
 
     if(Stmt()) {
+
        return Stmts();
     }
     else {
 
         return true;
 
+
+        // if(_lexer.peek(1).tokenType != TokenType::END_OF_FILE){
+            
+        //     //expect(TokenType::ERROR);
+            
+        //     return false;
+
+        // }
+
+    }
+}
+
+bool parser :: W(){
+
+    if(_lexer.peek(1).tokenType == TokenType::wapas) {
+        expect(TokenType::wapas);
+
+        if(_lexer.peek(1).tokenType == TokenType::bhaijo) {
+            expect(TokenType::bhaijo);
+
+            if(E()){
+
+                if(_lexer.peek(1).tokenType == TokenType::semi_colon) {
+                    expect(TokenType::semi_colon);
+
+                    Comment();
+                    return true;
+                    
+                }else{
+                    expect(TokenType::semi_colon);
+                }
+
+            }else{
+                syntax_error(_lexer.peek(1).tokenType);
+                return false;
+            }
+
+           
+
+        }else{
+            expect(TokenType::bhaijo);
+        }
     }
 }
 
@@ -1027,7 +1233,12 @@ bool parser :: Stmt() {
     if(FC()) {
         return true;
     }
+
+    if(W()){
+        return true;
+    }
      _lexer.setCurrentPointer(i);
+
     if(print()){
         return true;
     }
@@ -1044,7 +1255,7 @@ bool parser :: Stmt() {
         return true;
     }
     _lexer.setCurrentPointer(i);
-    if(K()) {
+    if(K()){
         return true;
     }
     _lexer.setCurrentPointer(i);
@@ -1056,12 +1267,19 @@ bool parser :: Stmt() {
 bool parser :: Start() {
 
     if(_lexer.peek(1).tokenType == TokenType::END_OF_FILE) {
+        
+        fout.close();
+
         return true;
     }
     if( F() ) {
+
        return Start();
 
-    }else {
+    }else if(C()){
+        return Start();
+    }
+    else {
         cout << "Syntax Error\n";
         exit(1);
     }

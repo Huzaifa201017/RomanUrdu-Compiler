@@ -1,4 +1,3 @@
-
 kaam calculateFib@adad (n@adad | c@adad) karo
 	rakho x@adad := 0;
 	rakho y@adad := 0;
@@ -6,7 +5,7 @@ kaam calculateFib@adad (n@adad | c@adad) karo
 
 	agar (n < 0) to phir karo
 		dekhao << `munfi number daal diya\n`;
-		wapas bhaijo 0;
+		wapas bhaijo 0; 
 	warna agar (n = 0) to phir
 		dekhao << `yar 0 hai!\n`;
 		wapas bhaijo 0;
@@ -15,7 +14,6 @@ kaam calculateFib@adad (n@adad | c@adad) karo
 		rakho i@adad := 1;
 		jab tak (i-1 >= n) karo
 			dekhao << x << ` `;
-			
 		bas karo
 	bas karo
 

@@ -8,6 +8,7 @@ class parser
 public:
     lexer _lexer;
     ofstream fout;
+    int tabsCount;
     string id;
     void syntax_error(TokenType t);
     token expect(TokenType expected_type);
