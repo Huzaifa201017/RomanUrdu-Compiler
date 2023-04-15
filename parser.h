@@ -28,11 +28,12 @@ public:
     bool A();
     bool Datatype();
     bool V();
-    bool B();
-    bool O();
-    bool FC();
-    bool Z();
-    bool U();
+    bool B(string& v);
+    bool O(string& v);
+    bool Y(string& v);
+    bool FC(string& v);
+    bool Z(int & c);
+    bool U(int &c);
     bool print();
     bool H();
     bool G();
@@ -50,7 +51,7 @@ public:
     bool K();
     bool Comment();
     bool W();
-    bool Y();
+    
 
     /*Terminal functions goes here use peek and expect*/
     /*

@@ -707,7 +707,7 @@ bool parser :: Datatype(){
 }
 
 bool parser :: V() {
-
+    string v = "";
     tabsCount++;
     printTabs(tabsCount);
     cout << "V\n";
@@ -738,7 +738,13 @@ bool parser :: V() {
                 if (Datatype()){
                     
 
-                    if(B()){
+                    if(B(v)){
+
+                        // intermediate code generation
+                        if (v != ""){
+                            fout2 << this->id << " " << v << endl;
+                        }
+
                         tabsCount++;
 
                         
@@ -789,7 +795,7 @@ bool parser :: V() {
 }
         
 
-bool parser :: B() {
+bool parser :: B(string& v) {
 
     tabsCount++;
     printTabs(tabsCount);
@@ -802,7 +808,10 @@ bool parser :: B() {
 
         expect(TokenType::assign);
         tabsCount--;
-        if ( O()) {
+        if ( O(v)) {
+            // intermediate code generation
+            v = "= " + v;
+
             tabsCount++;
             tabsCount--;
             tabsCount--;
@@ -822,7 +831,9 @@ bool parser :: B() {
         cout << ";\n";
         tabsCount--;
         tabsCount--;
-
+        
+        // intermediate code generation
+        v = "";
         expect(TokenType::semi_colon);
         return true;
     }
@@ -836,14 +847,14 @@ bool parser :: B() {
     
 }
 
-bool parser :: O() {
+bool parser :: O(string& v) {
 
     tabsCount++;
     printTabs(tabsCount);
     cout << "O\n";
    
 
-    if(FC())
+    if(FC(v))
     {
         tabsCount--;
         return true;
@@ -877,8 +888,10 @@ bool parser :: O() {
 }
 
 
-bool parser :: FC(){
-    
+bool parser :: FC(string& v){
+    int c = 0;
+    string id_lex = "";
+
     tabsCount++;
     printTabs(tabsCount);
     cout << "FC\n";
@@ -894,6 +907,7 @@ bool parser :: FC(){
         {
             printTabs(tabsCount);
             cout << "ID\n";
+            id_lex = _lexer.peek(1).lexeme;
 
             expect(TokenType::ID);
 
@@ -904,7 +918,7 @@ bool parser :: FC(){
 
                 expect(TokenType::openPara);
                 tabsCount--;
-                Z();
+                Z(c);
                 tabsCount++;
 
                 if (_lexer.peek(1).tokenType == TokenType::closePara)
@@ -921,13 +935,18 @@ bool parser :: FC(){
                         expect(TokenType::semi_colon);
 
                         tabsCount--;
-
+                        
                         Comment();
 
                         tabsCount++;
 
                         tabsCount--;
                         tabsCount--;
+
+                        // intermediate code generation
+                        fout2 << "call " << id_lex << " " << c << " " << "t1" << endl;
+                        v = "t1";
+
                         return true;
                     
                     } else{
@@ -959,28 +978,33 @@ bool parser :: FC(){
     
 }
 
-bool parser :: Z(){
+bool parser :: Z(int &c){
     
     tabsCount++;
     printTabs(tabsCount);
     cout << "Z\n";
     
-    if(E())
+    if(_lexer.peek(1).tokenType != TokenType::closePara &&  E())
     {
-        U();
+        // intermediate code generation
+        fout2 << "param " << "E1.v" << endl;
+
+        U(c);
         tabsCount--;
     }
     else
     {
+        // intermediate code generation
+        c = 0;
         tabsCount--;
         return true;
     }
    
 }
 
-bool parser :: U(){
+bool parser :: U(int &c){
     
-    
+    int _c = 0;
     tabsCount++;
     printTabs(tabsCount);
     cout << "U\n";
@@ -992,8 +1016,15 @@ bool parser :: U(){
         cout << "|\n";
         expect(TokenType::pipe);
         tabsCount--;
+
         E();
-        U();
+        // intermediate code generation
+        fout2 << "param " << "E1.v" << endl;
+
+        U(_c);
+        // intermediate code generation
+        c = _c + 1;
+
         tabsCount--;
         return true;
        
@@ -1001,6 +1032,8 @@ bool parser :: U(){
     else {
         tabsCount--;
         tabsCount--;
+        // intermediate code generation
+        c = 1;
         return true;
     }
     
@@ -1779,7 +1812,7 @@ bool parser :: While() {
 }
                             
 bool parser :: K() {
-
+    string v = "" , id_lex = "";
     tabsCount++;
     printTabs(tabsCount);
     cout << "K\n";
@@ -1789,11 +1822,17 @@ bool parser :: K() {
 
         printTabs(tabsCount);
         cout << "ID\n";
-        
+        id_lex = _lexer.peek(1).lexeme;
+
         expect(TokenType::ID);
 
         tabsCount--;
-        Y();
+        Y(v);
+        // intermediate code generation
+        if (v != ""){
+            fout2 << id_lex << " " << v << endl;
+        }
+        
         tabsCount++;
         
         if (_lexer.peek(1).tokenType == TokenType::cmnt){
@@ -1860,7 +1899,7 @@ bool parser :: W(){
             tabsCount--;
 
             if(E()) {
-
+                
                 tabsCount++;
 
                 if(_lexer.peek(1).tokenType == TokenType::semi_colon) {
@@ -1868,6 +1907,9 @@ bool parser :: W(){
 
                     printTabs(tabsCount);
                     cout << "semi_colon\n";
+                    
+                    // intermediate code generation
+                    fout2 << "ret " << "E.v" << endl;
 
                     tabsCount--;
 
@@ -1899,7 +1941,8 @@ bool parser :: W(){
     tabsCount--;
     tabsCount--;
 }
-bool parser:: Y(){
+bool parser:: Y(string& v){
+
     tabsCount++;
     printTabs(tabsCount);
     cout << "Y\n";
@@ -1911,7 +1954,9 @@ bool parser:: Y(){
 
         expect(TokenType::assign);
         tabsCount--;
-        if ( O()) {
+        if ( O(v)) {
+
+
             tabsCount++;
             tabsCount--;
             tabsCount--;
@@ -1933,7 +1978,7 @@ bool parser:: Y(){
     }
 }
 bool parser :: Stmt() {
-
+    string v = "";
 
     int i = _lexer.getCurrentPointer();
     tabsCount++;
@@ -1955,7 +2000,7 @@ bool parser :: Stmt() {
         return true;
     }
      _lexer.setCurrentPointer(i);
-    if(FC()) {
+    if(FC(v)) {
         tabsCount--;
         return true;
     }

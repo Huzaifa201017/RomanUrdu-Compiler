@@ -1,6 +1,6 @@
-out "munfi number daal diya\n"
-out "yar 0 hai!\n"
-out "\nfibonacci series: "
-out " "
 out "Enter the number"
 in num
+param E1.v
+call calculateFib 1 t1
+result = t1
+ret E.v

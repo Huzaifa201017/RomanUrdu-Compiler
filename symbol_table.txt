@@ -1,11 +1,4 @@
 ID    Type
-calculateFib adad
-n adad
-c adad
-x adad
-y adad
-z adad
-i adad
 markazi khali
 num adad
 result adad

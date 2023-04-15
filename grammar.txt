@@ -21,29 +21,34 @@ E -> R	{E'.i = R.v}
 E' -> +	
 	R	{E'1.i = E'.i + R.v}
 	E'1	{E'.s = E'1.s}
+
 E' -> -
 	R	{E'2.i = E'.i - R.v}
 	E'2	{E'.s = E'2.s}
+
 E' -> ^	{E'.s = E'.i}
 
 R -> T	{R'.i = T.v}
      R'	{R.v = R'.s}
+
 R' -> *	
 	T	{R'1.i = R'.i * T.v}
 	R'1	{R'.s = R'1.s}
+
 R' -> /
 	T	{R'2.i = R'.i / T.v}
 	R'2	{R'.s = R'2.s}
+
 R' -> %
 	T	{R'3.i = R'.i % T.v}
 	R'3	{R'.s = R'3.s}
+
 R' -> ^	{R'.s = R'.i}
 
 T -> id	    {T.v = id.lex}	
 T -> num	{T.v = num.lex}
 T -> (E)	{T.v = E.v}
 
--
 |-------------------------------------------- Function Declaration -------------------------------------|
 
 F -> kaam Func@FuncType (P) karo Stmts W kaam khatam
@@ -103,7 +108,7 @@ K -> ID Y { if(Y.v != ^){
 
 
 
-|--------------------------------------------- Function Call ---------------------------------------------|
+|--------------------------------------------- Function Call --------------------------------------|
 
 FC -> chalao ID(Z); {  var = new Temp();
                        fout << "call " << ID.lex << Z.c << " " << var 
@@ -117,7 +122,7 @@ Z -> ^ {Z.c = 0}
 
 U -> | 
      E { fout << "param " << E.v << endl;}
-     U {Uc + U1.c + 1}
+     U {U.c = U1.c + 1}
 
 U -> ^ {U.c = 1}
 
