@@ -19,23 +19,33 @@ E -> R	{E'.i = R.v}
      E'	{E.v = E'.s}
 		{fout << E.v << endl}
 E' -> +	
-	R	{E'1.i = E'.i + R.v}
+	R	{var = newTemp
+		 fout << var "=" E'.i "+" R.v << endl
+		 E'1.i = var}
 	E'1	{E'.s = E'1.s}
 E' -> -
-	R	{E'2.i = E'.i - R.v}
+	R	{var = newTemp
+		 fout << var "=" E'.i "-" R.v << endl
+		 E'2.i = var}
 	E'2	{E'.s = E'2.s}
 E' -> ^	{E'.s = E'.i}
 
 R -> T	{R'.i = T.v}
      R'	{R.v = R'.s}
 R' -> *	
-	T	{R'1.i = R'.i * T.v}
+	T	{var = newTenp
+		fout << var "=" R'.i "*" T.v << endl
+		R'1.i = var}
 	R'1	{R'.s = R'1.s}
 R' -> /
-	T	{R'2.i = R'.i / T.v}
+	T	{var = newTenp
+		fout << var "=" R'.i "/" T.v << endl
+		R'2.i = var}
 	R'2	{R'.s = R'2.s}
 R' -> %
-	T	{R'3.i = R'.i % T.v}
+	T	{var = newTenp
+		fout << var "=" R'.i "%" T.v << endl
+		R'3.i = var}
 	R'3	{R'.s = R'3.s}
 R' -> ^	{R'.s = R'.i}
 

@@ -1,6 +1,11 @@
+t0=a+b
+t1=t0+c
 out "munfi number daal diya\n"
 out "yar 0 hai!\n"
 out "\nfibonacci series: "
+t2=i-1
 out " "
 out "Enter the number"
 in num
+t3=arg2*b
+t4=arg1+t3

@@ -4,7 +4,7 @@
 #include <fstream>
 class parser
 {
-   
+
 public:
     lexer _lexer;
     ofstream fout1, fout2;
@@ -16,11 +16,11 @@ public:
     void readAndPrintAllInput();
     void resetPointer();
     bool C();
-    bool E();
-    bool _E();
-    bool R();
-    bool _R();
-    bool T();
+    bool E(string &s);
+    bool _E(string &s, string &i);
+    bool R(string &s);
+    bool _R(string &s, string &i);
+    bool T(string &s);
     bool F();
     bool Func();
     bool Functype();
@@ -52,16 +52,16 @@ public:
     bool W();
     bool Y();
 
+    string newTemp();
+
     /*Terminal functions goes here use peek and expect*/
     /*
     use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
     */
-	//all your parser function goes here
+    // all your parser function goes here
 };
 #endif
-
-
 
 // bool C();
 //     void E();
