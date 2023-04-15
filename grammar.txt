@@ -13,6 +13,36 @@ R -> TR'
 R' -> *TR' | /TR' | %TR' | ^
 T -> id|num|(E)
 
+Translation Scheme:
+
+E -> R	{E'.i = R.v}
+     E'	{E.v = E'.s}
+		{fout << E.v << endl}
+E' -> +	
+	R	{E'1.i = E'.i + R.v}
+	E'1	{E'.s = E'1.s}
+E' -> -
+	R	{E'2.i = E'.i - R.v}
+	E'2	{E'.s = E'2.s}
+E' -> ^	{E'.s = E'.i}
+
+R -> T	{R'.i = T.v}
+     R'	{R.v = R'.s}
+R' -> *	
+	T	{R'1.i = R'.i * T.v}
+	R'1	{R'.s = R'1.s}
+R' -> /
+	T	{R'2.i = R'.i / T.v}
+	R'2	{R'.s = R'2.s}
+R' -> %
+	T	{R'3.i = R'.i % T.v}
+	R'3	{R'.s = R'3.s}
+R' -> ^	{R'.s = R'.i}
+
+T -> id	{T.v = id.lex}	
+T -> num	{T.v = num.lex}
+T -> (E)	{T.v = E.v}
+
 -
 |-------------------------------------------- Function Declaration -------------------------------------|
 
@@ -95,7 +125,22 @@ U -> ^ {U.c = 1}
 
 print -> dekhao << G H ;Comment
 H -> << G H | ^
-G -> str | E
+G -> str | E	
+
+Translation Scheme:
+
+print -> dekhao
+	   << 
+	   G 	{fout << G.v << endl}
+	   H 
+	   ;Comment
+H -> << 
+     G	{fout << G.v << endl}
+     H
+H -> ^
+G -> str 	{G.v = str.lex}
+G -> E	{G.v = E.v}
+
 
 -
 |--------------------------------------------- Input ---------------------------------------------|
@@ -120,10 +165,56 @@ Conditional -> agar (E RO E) to phir karo Stmts ElseIf Else bas karo
 ElseIf -> warna agar (E RO E) to phir Stmts ElseIf | ^
 Else -> warna phir Stmts | ^
 
+Translation Scheme:
+
+Conditional -> agar 
+		   (E RO E)	{BE.t=n;
+				 print(if E.v RO.lex E.v goto __); ++n;
+				 BE.f=n;
+				 print(goto __); ++n;}
+		   to
+		   phir 
+		   karo	{fillBlank(BE.t,n)} 
+		   Stmts	{S.nxt=n; print(goto __); ++n;}
+		   ElseIf 	{fillBlank(BE.f,n)}
+		   Else 	{fillBlank(S.nxt,n)}
+		   bas 
+		   karo
+ElseIf -> warna 
+	    agar 
+	    (E RO E) {BE.t=n;
+			  print(if E.v RO.lex E.v goto __); ++n;
+			  BE.f=n;
+			  print(goto __); ++n;}
+	    to 
+	    phir	{fillBlank(BE.t,n)}
+	    Stmts 	{S.nxt=n; print(goto __); ++n;}
+	    ElseIf	{fillBlank(BE.f,n)}
+ElseIf -> ^
+Else -> warna 
+	  phir 
+	  Stmts 
+Else -> ^
+
+
 
 |--------------------------------------------- While Loop  ---------------------------------------------|
 
 while -> jab tak (E RO E) karo Stmts bas karo
+
+Translation Scheme:
+
+while -> jab 
+	   tak 
+	   (E RO E)	{BE.t=n;
+			 print(if E.v RO.lex E.v goto __); ++n;
+			 BE.f=n;
+			 print(goto __); ++n;}
+	   karo 	{fillBlank(BE.t,n)}
+	   Stmts 	{print(goto BE.t); ++n;
+			 fillBlank(BE.f,n);}
+	   bas 
+	   karo
 
 
 |--------------------------------------------- Statements  ---------------------------------------------|
