@@ -1,8 +1,8 @@
 kaam calculateFib@adad (n@adad | c@adad) karo
 	rakho x@adad := 0;
-	rakho y@adad := 0;
+	rakho y@adad := a+b+c;
 	rakho z@adad;
-	z := 0
+	z := 0;
 
 	agar (n < 0) to phir karo
 		dekhao << `munfi number daal diya\n`;
@@ -25,6 +25,6 @@ kaam khatam
 kaam markazi@khali () karo
 	rakho num@adad;
 	lo << `Enter the number` >> num; input
-	rakho result@adad := chalao calculateFib(arg1 | arg2);
+	rakho result@adad := chalao calculateFib(arg1+arg2*b);
 	wapas bhaijo 0; halt
 kaam khatam

@@ -39,7 +39,7 @@ R' -> %
 	R'3	{R'.s = R'3.s}
 R' -> ^	{R'.s = R'.i}
 
-T -> id	{T.v = id.lex}	
+T -> id	    {T.v = id.lex}	
 T -> num	{T.v = num.lex}
 T -> (E)	{T.v = E.v}
 
@@ -73,8 +73,9 @@ V -> rakho ID@DataType B Comment
 B -> ASSIGN O | ;
 O -> E; | FC
 
-Y -> ASSIGN O
+
 // For simple Initialization
+Y -> ASSIGN O
 K -> ID Y Comment
 
 
@@ -127,22 +128,24 @@ print -> dekhao << G H ;Comment
 H -> << G H | ^
 G -> str | E	
 
+
 Translation Scheme:
 
 print -> dekhao
 	   << 
-	   G 	{fout << G.v << endl}
+	   G
 	   H 
 	   ;Comment
 H -> << 
-     G	{fout << G.v << endl}
+     G
      H
 H -> ^
-G -> str 	{G.v = str.lex}
-G -> E	{G.v = E.v}
+G -> str 	{fout << str.lex << endl}
+G -> E	    {fout << E.v << endl}   
 
 
--
+
+
 |--------------------------------------------- Input ---------------------------------------------|
 
 
