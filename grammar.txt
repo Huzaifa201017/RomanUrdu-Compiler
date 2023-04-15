@@ -23,7 +23,11 @@ FuncType -> adad | khali
 |--------------------------------------------Return Statement------------------------------------------|
 W -> wapas bhaijo E; Comment | ^
 
--
+Translation Scheme
+W -> wapas bhaijo E; {fout << "ret " << E.v}
+     Comment
+W -> ^
+
 |-------------------------------------- Function Paramters while declaration. -----------------------------------|
 
 P -> ID@DataType A | ^
@@ -38,21 +42,55 @@ DataType -> adad
 V -> rakho ID@DataType B Comment
 B -> ASSIGN O | ;
 O -> E; | FC
-Comment -> cmnt | ^
+
+Y -> ASSIGN O
+// For simple Initialization
+K -> ID Y Comment
 
 
-K -> ID B Comment
+Translation Scheme:
+
+V -> rakho ID@DataType B { if(B.v != ^) {
+                               fout << ID.lex << " " << B.v << endl;
+                           }
+                         }
+     Comment
+B -> ASSIGN O {B.v = "= " + O.v}
+B -> ;  {B.v = ^}
+O -> E; {O.v = E.v}
+O -> FC {O.v = FC.v}
+
+// For simple Initialization
+Y -> ASSIGN O {Y.v = O.v}
+
+K -> ID Y { if(Y.v != ^){
+                fout << ID.lex << " " << Y.v << endl;
+            }
+          } 
+     Comment
  
 
 
--
+
 |--------------------------------------------- Function Call ---------------------------------------------|
 
-FC -> chalao ID(Z);Comment
-Z -> E U | ^
-U -> | E U  | ^
+FC -> chalao ID(Z); {  var = new Temp();
+                       fout << "call " << ID.lex << Z.c << " " << var 
+                       FC.v = var
+                    }
+      Comment
+Z -> E { fout << "param " << E.v << endl;}
+     U {Z.c = U.c}
 
--
+Z -> ^ {Z.c = 0}
+
+U -> | 
+     E { fout << "param " << E.v << endl;}
+     U {Uc + U1.c + 1}
+
+U -> ^ {U.c = 1}
+
+
 |--------------------------------------------- Print  ---------------------------------------------|
 
 print -> dekhao << G H ;Comment
@@ -66,6 +104,14 @@ G -> str | E
 input -> lo H >> Var I;Comment
 I -> >> Var I | ^
 Var  -> ID J
+J -> @DataType | ^
+
+-- Translation Scheme --:
+
+input -> lo H >> Var I;Comment
+I -> >> Var I | ^
+Var  -> ID {fout << "in " << ID.lex << endl;} 
+        J
 J -> @DataType | ^
 
 |--------------------------------------------- Conditionals  ---------------------------------------------|

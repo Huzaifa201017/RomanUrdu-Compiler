@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/huzaifafarooqi/Sem_6/Compiler Construction/RomanUrdu-Compiler",
+            "binaryPath": "/Users/huzaifafarooqi/Sem_6/Compiler Construction/RomanUrdu-Compiler/a.out",
+            "binaryArgs": []
+        }
+    ]
+}

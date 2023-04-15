@@ -829,6 +829,7 @@ bool parser :: B() {
     {
         tabsCount--;
         tabsCount--;
+        syntax_error(_lexer.peek(1).tokenType);
         return false;
     }
     
@@ -1782,7 +1783,7 @@ bool parser :: K() {
         expect(TokenType::ID);
 
         tabsCount--;
-        B();
+        Y();
         tabsCount++;
         
         if (_lexer.peek(1).tokenType == TokenType::cmnt){
@@ -1888,7 +1889,39 @@ bool parser :: W(){
     tabsCount--;
     tabsCount--;
 }
+bool parser:: Y(){
+    tabsCount++;
+    printTabs(tabsCount);
+    cout << "Y\n";
+    tabsCount++;
 
+    if (_lexer.peek(1).tokenType == TokenType::assign ){
+        printTabs(tabsCount);
+        cout << ":=\n";
+
+        expect(TokenType::assign);
+        tabsCount--;
+        if ( O()) {
+            tabsCount++;
+            tabsCount--;
+            tabsCount--;
+            return true;
+        }
+        else
+        {
+            tabsCount--;
+            tabsCount--;
+            syntax_error(_lexer.peek(1).tokenType);
+            return false;
+        }
+        
+    }else{
+        tabsCount--;
+        tabsCount--;
+        syntax_error(_lexer.peek(1).tokenType);
+        return false;
+    }
+}
 bool parser :: Stmt() {
 
 
@@ -1896,7 +1929,12 @@ bool parser :: Stmt() {
     tabsCount++;
     printTabs(tabsCount);
     cout << "Stmt\n";
-
+    
+    if(K()){
+        tabsCount--;
+        return true;
+    }
+    _lexer.setCurrentPointer(i);
     if( C() ) {
         tabsCount--;
         return true;
@@ -1938,11 +1976,7 @@ bool parser :: Stmt() {
         return true;
     }
     _lexer.setCurrentPointer(i);
-    if(K()){
-        tabsCount--;
-        return true;
-    }
-    _lexer.setCurrentPointer(i);
+   
 
     tabsCount--;
     return false;

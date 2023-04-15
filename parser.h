@@ -50,6 +50,7 @@ public:
     bool K();
     bool Comment();
     bool W();
+    bool Y();
 
     /*Terminal functions goes here use peek and expect*/
     /*

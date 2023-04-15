@@ -6,16 +6,16 @@
 using namespace std;
 
 int main(int argc, char* argv[])
-{
+{ 
+	parser p("sample_code.ru");
+	p.Start();
 	
 	//asking for file name as command line arguments
 	if (argc == 2)
 	{
-		parser p(argv[1]);
-		p.Start();
+		// parser p("sample_code.ru");
+		// p.Start();
 
-		
-		
 	}
 	else if (argc > 2)
 	{ //argument limit exceeds
