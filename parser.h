@@ -16,11 +16,11 @@ public:
     void readAndPrintAllInput();
     void resetPointer();
     bool C();
-    bool E();
-    bool _E();
-    bool R();
-    bool _R();
-    bool T();
+    bool E(string &s);
+    bool _E(string &s, string &i);
+    bool R(string &s);
+    bool _R(string &s, string &i);
+    bool T(string &s);
     bool F();
     bool Func();
     bool Functype();
@@ -51,6 +51,7 @@ public:
     bool K();
     bool Comment();
     bool W();
+    string newTemp();
     
 
     /*Terminal functions goes here use peek and expect*/
