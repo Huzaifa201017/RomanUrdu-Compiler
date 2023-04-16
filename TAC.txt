@@ -1,9 +1,9 @@
-t0=a+b
-t1=t0-3
-x = t1
-t2=4/4
-t3=t2*3
-y = t3
+t0=4/4
+t1=t0*3
+y = t1
+t2=f*x
+t3=t2/3
+z = t3
 param arg1
 param arg2
 call calculateFib 2 t4

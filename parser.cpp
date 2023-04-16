@@ -47,7 +47,7 @@ parser::parser(const char filename[])
 }
 
 
-void parser::readAndPrintAllInput() //read and print allinputs (provided)
+void parser::readAndPrintAllInput() //read and print all inputs (provided)
 {
     token t;
     t = _lexer.getNextToken();
@@ -1982,7 +1982,7 @@ bool parser:: Y(string& v){
         expect(TokenType::assign);
         tabsCount--;
         if ( O(v)) {
-
+             v = "= " + v;
 
             tabsCount++;
             tabsCount--;
