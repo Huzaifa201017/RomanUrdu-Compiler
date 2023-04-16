@@ -1,11 +1,31 @@
-ID    Type
-calculateFib adad 1
-n adad 1 NULL
-c adad 1 NULL
-x adad 1 23
-y adad 5 NULL
-z adad 6 NULL
-z 8 NULL
-markazi khali 13
-num adad 13 NULL
-result adad 18 NULL
+ID    Type    Datatype  Initial_Value  Address
+calculateFib func adad 1
+n var adad  0 0
+c var adad  0 4
+t0 var adad 0 8
+t1 var adad 0 12
+x var adad  0 16
+t2 var adad 0 20
+t3 var adad 0 24
+t4 var adad 0 28
+t5 var adad 0 32
+t6 var adad 0 36
+t7 var adad 0 40
+t8 var adad 0 44
+t9 var adad 0 48
+calculateKutti func khali 24
+n var x var adad adad adad  0 52
+c var adad  0 56
+t10 var adad 0 60
+t11 var adad 0 64
+x var adad  0 68
+t12 var adad 0 72
+t13 var adad 0 76
+t14 var adad 0 80
+t15 var adad 0 84
+t16 var adad 0 88
+t17 var adad 0 92
+markazi func khali 44
+num var adad  0 4
+t18 var adad 0 8
+result var adad 0 12

@@ -85,7 +85,7 @@ O -> E; | FC
 
 // For simple Initialization
 Y -> ASSIGN O
-K -> ID Y Comment
+K -> rakho ID Y Comment
 
 
 Translation Scheme:

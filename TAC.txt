@@ -1,19 +1,50 @@
- x = 23
- t0=4*3
- t1=4/t0
- t2=t1/x
- y = t2
- t3=f*x
- t4=t3/3
- z = t4
- param arg1
- param arg2
- call calculateFib 2 t5
- ret 0
+ t0=23+2
+ t1=t0/2
+ x = t1
+ out "Huzaifa"
+ out "Farooqi\n"
+ out "Huzaifa"
+ out "Farooqi"
+ out "Kutty Saly"
+ in x
+ in y
+ in b
+ t2=3-3
+ t3=t2/3
+ t4=num+t3
+ param t4
+ param b
+ t5=3/g
+ t6=2-t5
+ param t6
+ call calculateFib 3 t7
+ t8=3-3
+ t9=t8/3
+ ret t9
+ t10=23+2
+ t11=t10/2
+ x = t11
+ out "Huzaifa"
+ out "Farooqi\n"
+ out "Huzaifa"
+ out "Farooqi"
+ out "Kutty Saly"
+ in x
+ in y
+ in b
+ t12=3-3
+ t13=t12/3
+ t14=num+t13
+ param t14
+ param b
+ t15=3/g
+ t16=2-t15
+ param t16
+ call calculateFib 3 t17
  out "Enter the number"
  in num
- param arg1
- param arg2
- call calculateFib 2 t6
- result = t6
+ param num
+ param 0
+ call calculateFib 2 t18
+ result = t18
  ret 0
