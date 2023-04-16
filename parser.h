@@ -9,7 +9,7 @@ public:
     lexer _lexer;
     ofstream fout1, fout2;
     int tabsCount;
-    string id;
+
     void syntax_error(TokenType t);
     token expect(TokenType expected_type);
     parser(const char filename[]);

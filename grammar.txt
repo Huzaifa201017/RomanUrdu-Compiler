@@ -114,6 +114,11 @@ K -> ID Y { if(Y.v != ^){
 
 |--------------------------------------------- Function Call --------------------------------------|
 
+FC -> chalao ID(Z);Comment
+Z -> E U | ^
+U -> | E U  | ^
+
+-- Translation Scheme --:
 FC -> chalao ID(Z); {  var = new Temp();
                        fout << "call " << ID.lex << Z.c << " " << var 
                        FC.v = var

@@ -1,6 +1,6 @@
 kaam calculateFib@adad (n@adad | c@adad) karo
-	rakho x@adad;
-	rakho y@adad := 4/4*3;
+	rakho x@adad := 23;
+	rakho y@adad := (4/(4*3))/ x;
 	rakho z@adad;
     z := f*x/3;
     chalao calculateFib(arg1 | arg2);

@@ -1,10 +1,11 @@
 ID    Type
-calculateFib adad
-n adad
-c adad
-x adad
-y adad
-z adad
-markazi khali
-num adad
-result adad
+calculateFib adad 1
+n adad 1 NULL
+c adad 1 NULL
+x adad 1 23
+y adad 5 NULL
+z adad 6 NULL
+z 8 NULL
+markazi khali 13
+num adad 13 NULL
+result adad 18 NULL
