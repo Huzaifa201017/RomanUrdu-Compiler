@@ -45,17 +45,11 @@ parser::parser(const char filename[])
 
     fout1.open("symbol_table.txt", ios::trunc);
     fout1 << "ID    Type    Datatype  Initial_Value  Address\n";
-    fout1.open("symbol_table.txt", ios::trunc);
-    fout1 << "ID    Type\n";
 
     // ----------- Opening File for Three Address Code ------------------
     fout2.open("TAC.txt", ios::trunc);
 
     tabsCount = 0; // tabs count would be 0 initially
-
-    fout2.open("TAC.txt", ios::trunc);
-
-    tabsCount = 0;
     cout << "\n\nNow Parsing...\n\n";
 }
 
