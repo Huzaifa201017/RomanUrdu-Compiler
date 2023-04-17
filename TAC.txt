@@ -1,19 +1,5 @@
- x = 23
- t0=4*3
- t1=4/t0
- t2=t1/x
- y = t2
- t3=f*x
- t4=t3/3
- z = t4
- param arg1
- param arg2
- call calculateFib 2 t5
+if n LT 0 goto 3
+goto 5
+ out "munfi number daal diya\n"
  ret 0
- out "Enter the number"
- in num
- param arg1
- param arg2
- call calculateFib 2 t6
- result = t6
  ret 0

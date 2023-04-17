@@ -4,10 +4,11 @@
 #include <fstream>
 class parser
 {
-   
+
 public:
     lexer _lexer;
     ofstream fout1, fout2;
+    ifstream fin1;
     int tabsCount;
 
     void syntax_error(TokenType t);
@@ -28,11 +29,11 @@ public:
     bool A();
     bool Datatype();
     bool V();
-    bool B(string& v);
-    bool O(string& v);
-    bool Y(string& v);
-    bool FC(string& v);
-    bool Z(int & c);
+    bool B(string &v);
+    bool O(string &v);
+    bool Y(string &v);
+    bool FC(string &v);
+    bool Z(int &c);
     bool U(int &c);
     bool print();
     bool H();
@@ -52,18 +53,16 @@ public:
     bool Comment();
     bool W();
     string newTemp();
-    
+    void fillBlank(int line, int curr_line);
 
     /*Terminal functions goes here use peek and expect*/
     /*
     use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
     */
-	//all your parser function goes here
+    // all your parser function goes here
 };
 #endif
-
-
 
 // bool C();
 //     void E();
