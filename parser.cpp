@@ -3,6 +3,7 @@ int COUNT = 0, n = 1, address = -4;
 string temp = "";
 bool isAlreadyInitialized = false;
 vector<string> arr;
+int ElseCount = 0;
 
 string reserved1[] = {
     "END_OF_FILE",
@@ -1527,11 +1528,36 @@ bool parser ::Conditional()
                                 fillBlank(BE_t, n);
 
                                 Stmts();
-                                ElseIf();
+
+                                S_nxt = n;
+                                fout2 << "goto " << endl;
+                                ++n;
 
                                 fillBlank(BE_f, n);
 
+                                ElseIf();
+
                                 Else();
+
+                                // fillBlank(S_nxt, n);
+                                fin1.open("TAC.txt", ios::in);
+                                string tp;
+                                while (getline(fin1, tp))
+                                {
+                                    arr.push_back(tp);
+                                }
+                                fin1.close();
+                                fout2.close();
+                                fout2.open("TAC.txt", ios::trunc);
+                                for (int x = 0; x < arr.size(); x++)
+                                {
+                                    if (arr[x] == "goto ")
+                                    {
+                                        arr[x] += to_string(n);
+                                    }
+                                    fout2 << arr[x] << endl;
+                                }
+                                arr.clear();
 
                                 tabsCount++;
 
@@ -1615,6 +1641,10 @@ bool parser ::ElseIf()
     cout << "ElseIf\n";
     tabsCount++;
 
+    int BE_t = -1;
+    int BE_f = -1;
+    int S_nxt = -1;
+
     if (_lexer.peek(1).tokenType == TokenType::warna)
     {
 
@@ -1643,8 +1673,11 @@ bool parser ::ElseIf()
                 E(v);
                 tabsCount++;
 
+                string E1_v = v;
+
                 if (_lexer.peek(1).tokenType == TokenType::RO)
                 {
+                    string RO_lex = _lexer.peek(1).lexeme;
 
                     printTabs(tabsCount);
                     cout << "RO\n";
@@ -1655,6 +1688,8 @@ bool parser ::ElseIf()
                     E(v);
                     tabsCount++;
 
+                    string E2_v = v;
+
                     if (_lexer.peek(1).tokenType == TokenType::closePara)
                     {
 
@@ -1662,6 +1697,13 @@ bool parser ::ElseIf()
                         cout << "closePara\n";
 
                         expect(TokenType::closePara);
+
+                        BE_t = n;
+                        fout2 << "if " << E1_v << " " << RO_lex << " " << E2_v << " goto " << endl;
+                        ++n;
+                        BE_f = n;
+                        fout2 << "goto " << endl;
+                        ++n;
 
                         if (_lexer.peek(1).tokenType == TokenType::to)
                         {
@@ -1673,6 +1715,7 @@ bool parser ::ElseIf()
 
                             if (_lexer.peek(1).tokenType == TokenType::phir)
                             {
+                                ElseCount++;
 
                                 printTabs(tabsCount);
                                 cout << "phir\n";
@@ -1680,9 +1723,19 @@ bool parser ::ElseIf()
                                 expect(TokenType::phir);
 
                                 tabsCount--;
+
+                                fillBlank(BE_t, n);
+
                                 Stmts();
 
+                                S_nxt = n;
+                                fout2 << "goto " << endl;
+                                ++n;
+
+                                fillBlank(BE_f, n);
+
                                 bool x = ElseIf();
+
                                 tabsCount++;
 
                                 tabsCount--;
@@ -1788,6 +1841,9 @@ bool parser ::While()
     cout << "While\n";
     tabsCount++;
 
+    int BE_t = -1;
+    int BE_f = -1;
+
     if (_lexer.peek(1).tokenType == TokenType::jab)
     {
 
@@ -1816,8 +1872,11 @@ bool parser ::While()
                 E(v);
                 tabsCount++;
 
+                string E1_v = v;
+
                 if (_lexer.peek(1).tokenType == TokenType::RO)
                 {
+                    string RO_lex = _lexer.peek(1).lexeme;
 
                     printTabs(tabsCount);
                     cout << "RO\n";
@@ -1828,6 +1887,8 @@ bool parser ::While()
                     E(v);
                     tabsCount++;
 
+                    string E2_v = v;
+
                     if (_lexer.peek(1).tokenType == TokenType::closePara)
                     {
 
@@ -1835,6 +1896,13 @@ bool parser ::While()
                         cout << "closePara\n";
 
                         expect(TokenType::closePara);
+
+                        BE_t = n;
+                        fout2 << "if " << E1_v << " " << RO_lex << " " << E2_v << " goto " << endl;
+                        ++n;
+                        BE_f = n;
+                        fout2 << "goto " << endl;
+                        ++n;
 
                         if (_lexer.peek(1).tokenType == TokenType::karo)
                         {
@@ -1846,7 +1914,15 @@ bool parser ::While()
 
                             tabsCount--;
 
+                            fillBlank(BE_t, n);
+
                             Stmts();
+
+                            fout2 << "goto " << to_string(BE_t - 1) << endl;
+                            ++n;
+
+                            fillBlank(BE_f, n);
+
                             tabsCount++;
 
                             if (_lexer.peek(1).tokenType == TokenType::bas)
@@ -2111,7 +2187,6 @@ string parser ::newTemp()
 
 void parser ::fillBlank(int line, int curr_line)
 {
-    int L = 0;
     fin1.open("TAC.txt", ios::in);
     string tp;
     while (getline(fin1, tp))
