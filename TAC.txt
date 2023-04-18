@@ -4,17 +4,16 @@ if n LT 0 goto 5
 goto 8
  out "munfi number daal diya\n"
  ret 0
-goto 27
+goto 26
 if n EQ 0 goto 10
 goto 13
  out "yar 0 hai!\n"
  ret 0
-goto 27
+goto 26
  out "\nfibonacci series: "
  i = 1
  t0=i-1
-if t0 GE n goto 18
-goto 27
+if t0 GE n goto 26
  out x
  out " "
  t1=x+y

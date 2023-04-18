@@ -1900,9 +1900,6 @@ bool parser ::While()
                         BE_t = n;
                         fout2 << "if " << E1_v << " " << RO_lex << " " << E2_v << " goto " << endl;
                         ++n;
-                        BE_f = n;
-                        fout2 << "goto " << endl;
-                        ++n;
 
                         if (_lexer.peek(1).tokenType == TokenType::karo)
                         {
@@ -1914,14 +1911,12 @@ bool parser ::While()
 
                             tabsCount--;
 
-                            fillBlank(BE_t, n);
-
                             Stmts();
 
                             fout2 << "goto " << to_string(BE_t - 1) << endl;
                             ++n;
 
-                            fillBlank(BE_f, n);
+                            fillBlank(BE_t, n);
 
                             tabsCount++;
 

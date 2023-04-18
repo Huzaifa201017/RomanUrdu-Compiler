@@ -9,7 +9,7 @@ i var adad  1 20
 t0 var adad 0 24
 t1 var adad 0 28
 t2 var adad 0 32
-markazi func khali 28
+markazi func khali 27
 num var adad  0 4
 t3 var adad 0 8
 result var adad 0 12
