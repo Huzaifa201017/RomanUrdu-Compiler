@@ -560,7 +560,7 @@ bool parser :: Func() {
 
     if (_lexer.peek(1).tokenType == TokenType::markazi)
     {
-        address = 0;
+        address = -4;
         fout1 << "markazi func " ;
         printTabs(tabsCount);
         cout << "markazi\n";
@@ -574,6 +574,7 @@ bool parser :: Func() {
     }
     else if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        address = -4;
         fout1 << _lexer.peek(1).lexeme << " func " ;
         printTabs(tabsCount);
         cout << "ID\n";
@@ -601,14 +602,11 @@ bool parser :: Functype() {
     
     if (_lexer.peek(1).tokenType == TokenType::adad)
     {
-        fout1 << "adad " << n << endl;
+        fout1 << "adad 0 " << n << endl;
         printTabs(tabsCount);
         cout << "adad\n";
         tabsCount--;
         tabsCount--;
-
-         
-        // fout1 << id << " " << "adad\n";
     
 
        
@@ -618,7 +616,7 @@ bool parser :: Functype() {
     }
     else if (_lexer.peek(1).tokenType == TokenType::khali)
     {
-        fout1 << "khali " << n << endl;
+        fout1 << "khali 0 " << n << endl;
         
 
         printTabs(tabsCount);
@@ -626,7 +624,7 @@ bool parser :: Functype() {
         tabsCount--;
         tabsCount--;
 
-        // fout1 << id << " " << "khali\n";
+    
         expect(TokenType::khali);
         return true;
     }
@@ -649,6 +647,7 @@ bool parser :: P(){
 
     if (_lexer.peek(1).tokenType == TokenType::ID)
     {
+        temp = "";
         // symbol table printing
         fout1 << _lexer.peek(1).lexeme << " var ";
 
