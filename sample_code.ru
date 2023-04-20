@@ -1,7 +1,7 @@
 kaam calculateFib@adad (n@adad | c@adad) karo
-	rakho x@adad := (23+2)/2;
-	dekhao << `Huzaifa` << `Farooqi\n`;
-	lo << `Huzaifa` << `Farooqi` << `Kutty Saly` >> temp@adad >> x ;
+	rakho x@adad := 0;
+	rakho y@adad := 0;
+	rakho z@adad;
 
 	agar (n < 0) to phir karo
 		dekhao << `munfi number daal diya\n`;
@@ -10,7 +10,7 @@ kaam calculateFib@adad (n@adad | c@adad) karo
 		dekhao << `yar 0 hai!\n`;
 		wapas bhaijo 0;
 	warna phir
-		dekhao << `\nfibonacci series: `;
+    dekhao << `\nfibonacci series: `;
 		rakho i@adad := 1;
 		jab tak (i-1 >= n) karo
 			dekhao << x << ` `;

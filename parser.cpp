@@ -12,7 +12,8 @@ string reserved1[] = {
     "dekhao", "lo", "chalao", "wapas", "bhaijo", "adad", "khali", "khatam",
     "plus", "minus", "mul", "div", "mod",
     "pipe", "colon", "semi_colon", "at", "openPara", "closePara",
-    "ID", "NUM", "assign", "STR", "RO", "INPUT", "OUTPUT", "cmnt"};
+    "ID", "NUM", "assign", "STR", "RO", "INPUT", "OUTPUT", "cmnt"
+};
 
 void printTabs(int tabs)
 {
@@ -21,12 +22,14 @@ void printTabs(int tabs)
         cout << "\t";
     }
 }
+
 void parser::syntax_error(TokenType t)
 {
 
     cout << "SYNTAX ERROR: For word: " << reserved1[(int)t] << endl;
     exit(1);
 }
+
 token parser::expect(TokenType expected_type)
 {
     token t = _lexer.getNextToken();
@@ -34,6 +37,7 @@ token parser::expect(TokenType expected_type)
         syntax_error(t.tokenType);
     return t;
 }
+
 parser::parser(const char filename[])
 {
     _lexer = lexer(filename);
@@ -64,6 +68,7 @@ void parser::readAndPrintAllInput() // read and print all inputs (provided)
         t = _lexer.getNextToken();
     }
 }
+
 void parser::resetPointer()
 {
     _lexer.resetPointer();
@@ -2117,6 +2122,7 @@ bool parser ::W()
     tabsCount--;
     tabsCount--;
 }
+
 bool parser::Y(string &v)
 {
 
