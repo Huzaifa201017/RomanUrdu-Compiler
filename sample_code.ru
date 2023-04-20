@@ -1,7 +1,7 @@
 kaam calculateFib@adad (n@adad | c@adad) karo
 	rakho x@adad := (23+2)/2;
 	dekhao << `Huzaifa` << `Farooqi\n`;
-	lo << `Huzaifa` << `Farooqi` << `Kutty Saly` >> x@adad >> y >> b;
+	lo << `Huzaifa` << `Farooqi` << `Kutty Saly` >> temp@adad >> x ;
 
 	chalao calculateFib(num+((3-3)/3) | b | 2-3/g);
 

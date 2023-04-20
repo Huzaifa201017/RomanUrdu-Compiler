@@ -7,9 +7,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 { 
-	// parser p("sample_code.ru");
-	// p.Start();
-	
+
 	//asking for file name as command line arguments
 	if (argc == 2)
 	{

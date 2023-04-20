@@ -6,9 +6,8 @@
  out "Huzaifa"
  out "Farooqi"
  out "Kutty Saly"
+ in temp
  in x
- in y
- in b
  t2=3-3
  t3=t2/3
  t4=num+t3
