@@ -192,8 +192,9 @@ Conditional -> agar
 		   to
 		   phir 
 		   karo	{fillBlank(BE.t,n)} 
-		   Stmts	{S.nxt=n; print(goto __); ++n;}
-		   ElseIf 	{fillBlank(BE.f,n)}
+		   Stmts	{S.nxt=n; print(goto __); ++n;
+		   			 fillBlank(BE.f,n)}
+		   ElseIf 
 		   Else 	{fillBlank(S.nxt,n)}
 		   bas 
 		   karo
@@ -205,8 +206,9 @@ ElseIf -> warna
 			  print(goto __); ++n;}
 	    to 
 	    phir	{fillBlank(BE.t,n)}
-	    Stmts 	{S.nxt=n; print(goto __); ++n;}
-	    ElseIf	{fillBlank(BE.f,n)}
+	    Stmts 	{S.nxt=n; print(goto __); ++n;
+				 fillBlank(BE.f,n)}
+	    ElseIf
 ElseIf -> ^
 Else -> warna 
 	  phir 
@@ -224,12 +226,10 @@ Translation Scheme:
 while -> jab 
 	   tak 
 	   (E RO E)	{BE.t=n;
-			 print(if E.v RO.lex E.v goto __); ++n;
-			 BE.f=n;
-			 print(goto __); ++n;}
-	   karo 	{fillBlank(BE.t,n)}
-	   Stmts 	{print(goto BE.t); ++n;
-			 fillBlank(BE.f,n);}
+			 print(if E.v RO.lex E.v goto __); ++n;}
+	   karo 
+	   Stmts 	{print(goto BE.t-1); ++n;
+			 fillBlank(BE.t,n);}
 	   bas 
 	   karo
 

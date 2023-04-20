@@ -44,6 +44,6 @@
  in num
  param num
  param 0
- call calculateFib 2 t18
- result = t18
+ call calculateFib 2 t3
+ result = t3
  ret 0
