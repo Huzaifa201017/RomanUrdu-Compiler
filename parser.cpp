@@ -138,7 +138,6 @@ bool parser ::E(string &s)
         {
 
             tabsCount--;
-            // fout2 << " " << s << endl;
             return true;
         }
     }
@@ -168,7 +167,7 @@ bool parser ::_E(string &s, string &i)
         {
             string var = newTemp();
             // printing in TAC.txt
-            fout2 << " " << var << "=" << i << "+" << s << endl;
+            fout2 << var << " = " << i << " + " << s << endl;
             n++;
             // printing in symbol_table.txt
             address += 4;
@@ -208,7 +207,7 @@ bool parser ::_E(string &s, string &i)
         {
             string var = newTemp();
             // printing in TAC.txt
-            fout2 << " " << var << "=" << i << "-" << s << endl;
+            fout2 << var << " = " << i << " - " << s << endl;
             n++;
 
             // printing in symbol_table.txt
@@ -286,7 +285,7 @@ bool parser ::_R(string &s, string &i)
 
         // printing in TAC.txt
 
-        fout2 << " " << var << "=" << i << "*" << s << endl;
+        fout2 << var << " = " << i << " * " << s << endl;
         n++;
 
         // printing in symbol_table.txt
@@ -312,7 +311,7 @@ bool parser ::_R(string &s, string &i)
 
         // printing in TAC.txt
         string var = newTemp();
-        fout2 << " " << var << "=" << i << "/" << s << endl;
+        fout2 << var << " = " << i << " / " << s << endl;
         n++;
 
         // printing in symbol_table.txt
@@ -339,7 +338,7 @@ bool parser ::_R(string &s, string &i)
 
         // printing in TAC.txt
         string var = newTemp();
-        fout2 << " " << var << "=" << i << "%" << s << endl;
+        fout2  << var << " = " << i << " % " << s << endl;
         n++;
 
         // printing in symbol_table.txt
@@ -823,7 +822,7 @@ bool parser ::V()
                         // intermediate code generation
                         if (v != "")
                         {
-                            fout2 << " " << id_lex << " " << v << endl;
+                            fout2 << id_lex << " " << v << endl;
                             n++;
                         }
 
@@ -1259,8 +1258,7 @@ bool parser ::G()
         cout << "STR\n";
 
         // intermediate code generation
-        fout2 << " "
-              << "out " << '"' << _lexer.peek(1).lexeme << '"' << endl;
+        fout2 << "out " << '"' << _lexer.peek(1).lexeme << '"' << endl;
         n++;
 
         expect(TokenType::STR);
@@ -1272,8 +1270,7 @@ bool parser ::G()
     else if (E(v))
     {
         // intermediate code generation
-        fout2 << " "
-              << "out " << v << endl;
+        fout2 << "out " << v << endl;
         n++;
 
         tabsCount--;
@@ -1395,8 +1392,7 @@ bool parser :: Var(){
         cout << "ID\n";
 
         // intermediate code generation
-        fout2 << " "
-              << "in " << _lexer.peek(1).lexeme << endl;
+        fout2 << "in " << _lexer.peek(1).lexeme << endl;
         n++;
         
         id_lex =  _lexer.peek(1).lexeme;
@@ -2027,7 +2023,7 @@ bool parser ::K()
             // intermediate code generation
             if (v != "")
             {
-                fout2 << " " << id_lex << " " << v << endl;
+                fout2 << id_lex << " " << v << endl;
                 n++;
             }
 
@@ -2087,8 +2083,7 @@ bool parser ::W()
                     cout << "semi_colon\n";
 
                     // intermediate code generation
-                    fout2 << " "
-                          << "ret " << v << endl;
+                    fout2 << "ret " << v << endl;
                     n++;
 
                     tabsCount--;
