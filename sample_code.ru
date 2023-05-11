@@ -1,4 +1,3 @@
-;fibonacci series ka hisaab karnay and dekhanay wala program
 kaam markazi@khali () karo
 	rakho x@adad := 0;
 	rakho y@adad := 0;

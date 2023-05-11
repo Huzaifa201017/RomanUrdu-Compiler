@@ -4,6 +4,9 @@
     "iosfwd": "cpp",
     "xstring": "cpp",
     "iostream": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "unordered_map": "cpp",
+    "ostream": "cpp",
+    "string": "cpp"
   }
 }

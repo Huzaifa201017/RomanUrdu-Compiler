@@ -12,8 +12,7 @@ string reserved1[] = {
     "dekhao", "lo", "chalao", "wapas", "bhaijo", "adad", "khali", "khatam",
     "plus", "minus", "mul", "div", "mod",
     "pipe", "colon", "semi_colon", "at", "openPara", "closePara",
-    "ID", "NUM", "assign", "STR", "RO", "INPUT", "OUTPUT", "cmnt"
-};
+    "ID", "NUM", "assign", "STR", "RO", "INPUT", "OUTPUT", "cmnt"};
 
 void printTabs(int tabs)
 {
@@ -338,7 +337,7 @@ bool parser ::_R(string &s, string &i)
 
         // printing in TAC.txt
         string var = newTemp();
-        fout2  << var << " = " << i << " % " << s << endl;
+        fout2 << var << " = " << i << " % " << s << endl;
         n++;
 
         // printing in symbol_table.txt
@@ -559,7 +558,7 @@ bool parser ::Func()
     if (_lexer.peek(1).tokenType == TokenType::markazi)
     {
         address = -4;
-        fout1 << "markazi func " ;
+        fout1 << "markazi func ";
         printTabs(tabsCount);
         cout << "markazi\n";
         tabsCount--;
@@ -572,7 +571,7 @@ bool parser ::Func()
     else if (_lexer.peek(1).tokenType == TokenType::ID)
     {
         address = -4;
-        fout1 << _lexer.peek(1).lexeme << " func " ;
+        fout1 << _lexer.peek(1).lexeme << " func ";
         printTabs(tabsCount);
         cout << "ID\n";
         tabsCount--;
@@ -603,9 +602,7 @@ bool parser ::Functype()
         cout << "adad\n";
         tabsCount--;
         tabsCount--;
-    
 
-       
         expect(TokenType::adad);
 
         return true;
@@ -613,14 +610,12 @@ bool parser ::Functype()
     else if (_lexer.peek(1).tokenType == TokenType::khali)
     {
         fout1 << "khali 0 " << n << endl;
-        
 
         printTabs(tabsCount);
         cout << "khali\n";
         tabsCount--;
         tabsCount--;
 
-    
         expect(TokenType::khali);
         return true;
     }
@@ -758,7 +753,7 @@ bool parser ::Datatype()
 
     if (_lexer.peek(1).tokenType == TokenType::adad)
     {
-        temp += "adad ";
+        temp += "adad";
 
         printTabs(tabsCount);
         cout << "adad\n";
@@ -1281,7 +1276,8 @@ bool parser ::G()
     return false;
 }
 
-bool parser :: input(){
+bool parser ::input()
+{
     temp = "";
     tabsCount++;
     printTabs(tabsCount);
@@ -1348,9 +1344,8 @@ bool parser :: input(){
     return false;
 }
 
-bool parser :: I()
+bool parser ::I()
 {
-
 
     tabsCount++;
     printTabs(tabsCount);
@@ -1378,7 +1373,8 @@ bool parser :: I()
     }
 }
 
-bool parser :: Var(){
+bool parser ::Var()
+{
     string id_lex = "";
     tabsCount++;
     printTabs(tabsCount);
@@ -1394,16 +1390,16 @@ bool parser :: Var(){
         // intermediate code generation
         fout2 << "in " << _lexer.peek(1).lexeme << endl;
         n++;
-        
-        id_lex =  _lexer.peek(1).lexeme;
-        
+
+        id_lex = _lexer.peek(1).lexeme;
+
         expect(TokenType::ID);
         tabsCount--;
 
-    
-
-        if(J()){
-            if(temp != ""){
+        if (J())
+        {
+            if (temp != "")
+            {
                 address += 4;
                 fout1 << id_lex << " var " << temp << " 0 " << address << endl;
                 temp = "";
