@@ -758,7 +758,7 @@ bool parser ::Datatype()
 
     if (_lexer.peek(1).tokenType == TokenType::adad)
     {
-        temp += "adad ";
+        temp += "adad";
 
         printTabs(tabsCount);
         cout << "adad\n";

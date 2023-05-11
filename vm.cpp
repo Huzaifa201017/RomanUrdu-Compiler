@@ -23,8 +23,11 @@ vector<string> output(vector<string> instruction){
     ins.push_back("out");
     string s = instruction[1];
     
-    if (int(s[0]) == 34)
+    if (int(s[0]) == 34){
+        ins.push_back(s.substr(0,1));
         ins.push_back(s.substr(1,s.length()-2));
+        ins.push_back(s.substr(s.length()-1,1));
+    }
     else
         ins.push_back(s);
     
@@ -119,7 +122,7 @@ vector<string> convertToMachineCode(vector<string> instruction){
 
 }
 
-void tokenize(vector<string> Tac, vector<vector<string> > machineCode)
+void tokenize(vector<string> Tac, vector<vector<string> > & machineCode)
 {
     vector<string> tokens;
     for (int x = 0; x < Tac.size(); x++)
