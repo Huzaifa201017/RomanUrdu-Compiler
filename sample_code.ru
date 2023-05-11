@@ -14,7 +14,7 @@ kaam markazi@khali () karo
         rakho result@adad := 1; 
 	    dekhao << `\nfibonacci series: `;
 		rakho i@adad := 2;
-		jab tak (i-1 >= n) karo
+		jab tak (i - 1 >= n) karo
 			rakho result := result * i;
 			rakho i := i + 1;
 		bas karo 

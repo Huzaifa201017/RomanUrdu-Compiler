@@ -1850,7 +1850,7 @@ bool parser ::While()
     tabsCount++;
 
     int BE_t = -1;
-    int BE_f = -1;
+    int BE_f = n;
 
     if (_lexer.peek(1).tokenType == TokenType::jab)
     {
@@ -1921,7 +1921,7 @@ bool parser ::While()
 
                             Stmts();
 
-                            fout2 << "goto " << to_string(BE_t - 1) << endl;
+                            fout2 << "goto " << to_string(BE_f) << endl;
                             ++n;
 
                             fillBlank(BE_t, n);
