@@ -1,9 +1,10 @@
 {
-  "files.associations": {
-    "*.ru": "raw",
-    "iosfwd": "cpp",
-    "xstring": "cpp",
-    "iostream": "cpp",
-    "vector": "cpp"
-  }
+    "files.associations": {
+        "*.ru": "raw",
+        "*.cpp": "cpp",
+        "iosfwd": "cpp",
+        "unordered_map": "cpp",
+        "iostream": "cpp",
+        "string": "cpp"
+    }
 }

@@ -1,32 +1,25 @@
-;fibonacci series ka hisaab karnay and dekhanay wala program
 kaam markazi@khali () karo
-	rakho x@adad := 0;
-	rakho y@adad := 0;
-	rakho z@adad;
 
-	agar (n < 0) to phir karo
-		dekhao << `munfi number daal diya\n`;
-		dekhao << 0; 
-	warna agar (n = 0) to phir
-		dekhao << `yar 0 hai!\n`;
-		dekhao << 0; 
-	warna phir
 
+	lo << `Enter the number : ` >> n@adad ;input
+ 
+
+	agar (n = 0) to phir karo
+		dekhao << 1;
+		wapas bhaijo 0; 
+	warna agar (n = 1) to phir
+		dekhao << 1;
+		wapas bhaijo 0;
+    warna phir
+        rakho result@adad := 1; 
 	    dekhao << `\nfibonacci series: `;
-		rakho i@adad := 1;
+		rakho i@adad := 2;
 		jab tak (i-1 >= n) karo
-			dekhao << x << ` `;
-			rakho z := x + y;
-			rakho x := y;
-			rakho y := z;
+			rakho result := result * i;
 			rakho i := i + 1;
-		bas karo
+		bas karo 
+        dekhao << `Result is: ` << result;
 	bas karo
-	dekhao << i ;
 
-	rakho num@adad;
-	lo << `Enter the number` >> num; input
-	wapas bhaijo 0; halt
-
-
+   
 kaam khatam
