@@ -205,6 +205,10 @@ void fillmap(unordered_map<string, int> &map, vector<vector<string> > ST, vector
     {
         string var = ST[i][0];
         ds.push_back(stoi(ST[i][3]));
+        if (map.find(ST[i][0]) != map.end()){
+            cout << "Semantic Error: Variable '" << ST[i][0] << "'already declared\n";
+            exit(0);
+        }
         map[ST[i][0]] = ds.size() - 1;
         // cout << ST[i][0] << " " << map[ST[i][0]] << " " << ds[map[ST[i][0]]] << endl;
     }
@@ -237,6 +241,7 @@ int getOperandData(unordered_map<string, int> &map ,vector<int> & ds,string oper
         return ds[i];
     }
 }
+
 void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode)
 {
     unordered_map<string, int> map;
@@ -366,6 +371,17 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
                 pc = nextLineToJumpOn - 2;
 
         }
+         else if(machineCode[pc][0] == "NE"){
+
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
+            int nextLineToJumpOn = stoi(machineCode[pc][3]);
+
+            if (firstOperand == secondOperand)
+                pc = nextLineToJumpOn - 2;
+
+        }
         
         else if(machineCode[pc][0] == "in"){
 
@@ -379,7 +395,7 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
         else if(machineCode[pc][0] == "out"){
 
             if (int(machineCode[pc][1][0]) == 34 ){
-                cout << machineCode[pc][2];
+                cout << string(machineCode[pc][2]);
                 
             }else{
                

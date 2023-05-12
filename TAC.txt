@@ -1,24 +1,34 @@
-out "Enter the number : "
-in n
-if n EQ 0 goto 5
-goto 8
-out 1
+x = 0
+y = 0
+n = 3
+t0 = y + 1
+t1 = t0 * 8
+t2 = t1 / 2
+t3 = x + t2
+z = t3
+if n LT 0 goto 11
+goto 14
+out "munfi number daal diya\n"
 ret 0
-goto 25
-if n EQ 1 goto 10
-goto 13
-out 1
+goto 35
+if n EQ 0 goto 16
+goto 19
+out "yar 0 hai!\n"
 ret 0
-goto 25
-result = 1
+goto 35
 out "\nfibonacci series: "
-i = 2
-t0 = i - 1
-if t0 GE n goto 23
-t1 = result * i
-result = t1
-t2 = i + 1
-i = t2
-goto 16
-out "Result is: "
-out result
+i = 1
+t4 = i - 1
+if t4 GE n goto 32
+out x
+out " "
+t5 = x + y
+z = t5
+x = y
+y = z
+t6 = i + 1
+i = t6
+goto 21
+t7 = i - 1
+if t7 GE n goto 35
+goto 32

@@ -10,8 +10,8 @@ int main(int argc, char* argv[])
 
 	//asking for file name as command line arguments
 	if (argc == 2)
-	{
-		parser p("sample_code.ru");
+	{  
+		parser p(argv[1]);
 		p.Start();
 
 	}
