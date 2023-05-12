@@ -20,9 +20,9 @@ vector<string> getTac()
     return arr;
 }
 
-vector<vector<string>> getSymTab()
+vector<vector<string> > getSymTab()
 {
-    vector<vector<string>> ST;
+    vector<vector<string> > ST;
 
     vector<string> arr;
     ifstream fin2;
@@ -59,12 +59,11 @@ vector<string> output(vector<string> instruction)
     vector<string> ins;
     ins.push_back("out");
     string s = instruction[1];
-
-    if (int(s[0]) == 34)
-    {
-        ins.push_back(s.substr(0, 1));
-        ins.push_back(s.substr(1, s.length() - 2));
-        ins.push_back(s.substr(s.length() - 1, 1));
+    
+    if (int(s[0]) == 34){
+        ins.push_back(s.substr(0,1));
+        ins.push_back(s.substr(1,s.length()-2));
+        ins.push_back(s.substr(s.length()-1,1));
     }
     else
         ins.push_back(s);
@@ -171,7 +170,7 @@ vector<string> convertToMachineCode(vector<string> instruction)
     }
 }
 
-void tokenize(vector<string> Tac, vector<vector<string>> &machineCode)
+void tokenize(vector<string> Tac, vector<vector<string> > & machineCode)
 {
     vector<string> tokens;
     for (int x = 0; x < Tac.size(); x++)
@@ -200,7 +199,7 @@ void tokenize(vector<string> Tac, vector<vector<string>> &machineCode)
     }
 }
 
-void fillmap(unordered_map<string, int> &map, vector<vector<string>> ST, vector<int> &ds)
+void fillmap(unordered_map<string, int> &map, vector<vector<string> > ST, vector<int> &ds)
 {
     for (int i = 2, j = 0; i < ST.size(); i++, j++)
     {
@@ -210,43 +209,35 @@ void fillmap(unordered_map<string, int> &map, vector<vector<string>> ST, vector<
         // cout << ST[i][0] << " " << map[ST[i][0]] << " " << ds[map[ST[i][0]]] << endl;
     }
 }
-void checkVariableExistance(unordered_map<string, int> &map, string variable)
-{
-    if (map.find(variable) == map.end())
-    {
+void checkVariableExistance(unordered_map<string, int> &map , string variable){
+    if (map.find(variable) == map.end()){
         cout << "Semantic Error: '" << variable << "' not declared\n";
-        exit(0);
+        exit(0);   
     }
 }
-bool isNumericString(string variable)
-{
+bool isNumericString(string variable){
 
-    for (char c : variable)
-    {
-        if (!isdigit(c))
-        {
+    for (char c : variable) {
+        if (!isdigit(c)) {
             return false;
         }
     }
     return true;
 }
-int getOperandData(unordered_map<string, int> &map, vector<int> &ds, string operand)
-{
+int getOperandData(unordered_map<string, int> &map ,vector<int> & ds,string operand){
     // check whether this operand is number or variable
-    if (isNumericString(operand))
-    {
+    if (isNumericString(operand)){
         // it is a number
         return stoi(operand);
-    }
-    else
-    {
+
+    }else{
         // it is a variable
-        checkVariableExistance(map, operand);
+        checkVariableExistance(map , operand);
         int i = map[operand];
         return ds[i];
     }
 }
-void executeCode(vector<vector<string>> ST, vector<vector<string>> machineCode)
+void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode)
 {
     unordered_map<string, int> map;
     vector<int> ds;
@@ -257,164 +248,156 @@ void executeCode(vector<vector<string>> ST, vector<vector<string>> machineCode)
     //     cout << it->first << " " << map[it->first] << " " << ds[map[it->first]] << endl;
     // }
     int pc = 0;
-    for (pc = 0; pc < machineCode.size(); ++pc)
-    {
+    for ( pc = 0; pc < machineCode.size() ; ++pc) {
 
-        if (machineCode[pc][0] == "+")
-        {
-
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
+        if (machineCode[pc][0] == "+"){
+            
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
 
             // now for the detination memory location
-            checkVariableExistance(map, machineCode[pc][3]);
+            checkVariableExistance(map , machineCode[pc][3]);
             int k = map[machineCode[pc][3]];
 
             ds[k] = firstOperand + secondOperand;
-        }
-        else if (machineCode[pc][0] == "-")
-        {
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
+        }else if (machineCode[pc][0] == "-"){
+            
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
 
             // now for the detination memory location
-            checkVariableExistance(map, machineCode[pc][3]);
+            checkVariableExistance(map , machineCode[pc][3]);
             int k = map[machineCode[pc][3]];
-
+            
             ds[k] = firstOperand - secondOperand;
-        }
-        else if (machineCode[pc][0] == "*")
-        {
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
+        }
+        else if (machineCode[pc][0] == "*"){
+            
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
 
             // now for the detination memory location
-            checkVariableExistance(map, machineCode[pc][3]);
+            checkVariableExistance(map , machineCode[pc][3]);
             int k = map[machineCode[pc][3]];
-
+            
             ds[k] = firstOperand * secondOperand;
-        }
-        else if (machineCode[pc][0] == "/")
-        {
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
+        }
+        else if (machineCode[pc][0] == "/"){
+            
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
 
             // now for the detination memory location
-            checkVariableExistance(map, machineCode[pc][3]);
+            checkVariableExistance(map , machineCode[pc][3]);
             int k = map[machineCode[pc][3]];
-
+            
             ds[k] = firstOperand / secondOperand;
-        }
-        else if (machineCode[pc][0] == "%")
-        {
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
+        }
+        else if (machineCode[pc][0] == "%"){
+            
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
 
             // now for the detination memory location
-            checkVariableExistance(map, machineCode[pc][3]);
+            checkVariableExistance(map , machineCode[pc][3]);
             int k = map[machineCode[pc][3]];
-
+            
             ds[k] = firstOperand * secondOperand;
+
         }
-        else if (machineCode[pc][0] == "goto")
-        {
+        else if(machineCode[pc][0] == "goto"){
 
             pc = stoi(machineCode[pc][1]) - 2;
         }
-        else if (machineCode[pc][0] == "LE")
-        {
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
-
+        else if(machineCode[pc][0] == "LE"){
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
             int nextLineToJumpOn = stoi(machineCode[pc][3]);
 
             if (firstOperand <= secondOperand)
                 pc = nextLineToJumpOn - 2;
         }
-        else if (machineCode[pc][0] == "GE")
-        {
+         else if(machineCode[pc][0] == "GE"){
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
-
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
             int nextLineToJumpOn = stoi(machineCode[pc][3]);
 
             if (firstOperand >= secondOperand)
                 pc = nextLineToJumpOn - 2;
         }
-        else if (machineCode[pc][0] == "LT")
-        {
+        else if(machineCode[pc][0] == "LT"){
 
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
-
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
             int nextLineToJumpOn = stoi(machineCode[pc][3]);
 
             if (firstOperand < secondOperand)
                 pc = nextLineToJumpOn - 2;
+
         }
+        
+        else if(machineCode[pc][0] == "GT"){
 
-        else if (machineCode[pc][0] == "GT")
-        {
-
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
-
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
             int nextLineToJumpOn = stoi(machineCode[pc][3]);
             if (firstOperand > secondOperand)
                 pc = nextLineToJumpOn - 2;
+
         }
+        
+        else if(machineCode[pc][0] == "EQ"){
 
-        else if (machineCode[pc][0] == "EQ")
-        {
-
-            int firstOperand = getOperandData(map, ds, machineCode[pc][1]);
-            int secondOperand = getOperandData(map, ds, machineCode[pc][2]);
-
+            int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
+            int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
+            
             int nextLineToJumpOn = stoi(machineCode[pc][3]);
 
             if (firstOperand == secondOperand)
                 pc = nextLineToJumpOn - 2;
+
         }
+        
+        else if(machineCode[pc][0] == "in"){
 
-        else if (machineCode[pc][0] == "in")
-        {
-
-            checkVariableExistance(map, machineCode[pc][1]);
+            checkVariableExistance(map , machineCode[pc][1]);
             int i = map[machineCode[pc][1]];
             cin >> ds[i];
+        
+
         }
+        
+        else if(machineCode[pc][0] == "out"){
 
-        else if (machineCode[pc][0] == "out")
-        {
-
-            if (int(machineCode[pc][1][0]) == 34)
-            {
+            if (int(machineCode[pc][1][0]) == 34 ){
                 cout << machineCode[pc][2];
-            }
-            else
-            {
-
-                int value = getOperandData(map, ds, machineCode[pc][1]);
+                
+            }else{
+               
+                int value = getOperandData(map,ds,machineCode[pc][1]);
                 cout << value;
             }
         }
+        
+        else if (machineCode[pc][0] == "mov"){
 
-        else if (machineCode[pc][0] == "mov")
-        {
-
-            checkVariableExistance(map, machineCode[pc][1]);
+            checkVariableExistance(map , machineCode[pc][1]);
             int i = map[machineCode[pc][1]];
-            ds[i] = getOperandData(map, ds, machineCode[pc][2]);
+            ds[i] = getOperandData(map,ds,machineCode[pc][2]);
+
         }
-
-        else if (machineCode[pc][0] == "ret")
-        {
-
+        
+        else if (machineCode[pc][0] == "ret"){
+        
             exit(0);
         }
     }
@@ -423,8 +406,8 @@ void executeCode(vector<vector<string>> ST, vector<vector<string>> machineCode)
 int main()
 {
     vector<string> Tac = getTac();
-    vector<vector<string>> ST = getSymTab();
-    vector<vector<string>> machineCode;
+    vector<vector<string> > ST = getSymTab();
+    vector<vector<string> > machineCode;
     tokenize(Tac, machineCode);
 
     for (int i = 0; i < machineCode.size(); i++)
@@ -435,7 +418,7 @@ int main()
         }
         cout << endl;
     }
-
+    
     cout << "Executing ...\n";
     executeCode(ST, machineCode);
 
@@ -445,6 +428,7 @@ int main()
     // }
 
     // cout << stoi("147") << endl;
+
 
     return 0;
 }
