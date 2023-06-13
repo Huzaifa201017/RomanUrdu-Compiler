@@ -14,11 +14,6 @@ In the phase 1 we have developed an Lexical Analyzer , which analyzes the source
 - DFA.pdf      (DFA of the language)
 - definition.txt  (Regular exxpressions of the language)
 
-### Problems Faced:
-- We haven't faced any major issues while the development of this phase. There were some confusions regarding 
-the syntax of the language and also the pattern of our (token , lexime) pairs for some of our language parts,
-but we then got the solution ,after a little discussion with our Instructor and his assistant.
-
 ### Note:
 In the attached DFA diagram :
 
@@ -82,7 +77,7 @@ In this phase, we have developed a Machine code generator using the intermediate
 - TAC.txt (created on runtime and contains the intermediate code for the language)
 - symbol_table.txt (created on runtime and contains the information of variables and functions)
 
-### Execution:
+## Execution:
 
 To run this project , you first have to load the project in the vscode.
 - Open new terminal
