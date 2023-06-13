@@ -6,11 +6,11 @@ using namespace std;
 
 int s_index = 2;
 
-vector<string> getTac()
+vector<string> getTac(const char filename[])
 {
     vector<string> arr;
     ifstream fin1;
-    fin1.open("TAC.txt", ios::in);
+    fin1.open(filename, ios::in);
     string tp;
     while (getline(fin1, tp))
     {
@@ -266,7 +266,9 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
 
             ds[k] = firstOperand + secondOperand;
 
-        }else if (machineCode[pc][0] == "-"){
+        }
+        
+        else if (machineCode[pc][0] == "-"){
             
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
             int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
@@ -278,6 +280,7 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             ds[k] = firstOperand - secondOperand;
 
         }
+        
         else if (machineCode[pc][0] == "*"){
             
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
@@ -290,6 +293,7 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             ds[k] = firstOperand * secondOperand;
 
         }
+        
         else if (machineCode[pc][0] == "/"){
             
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
@@ -302,6 +306,7 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             ds[k] = firstOperand / secondOperand;
 
         }
+        
         else if (machineCode[pc][0] == "%"){
             
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
@@ -314,10 +319,12 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             ds[k] = firstOperand * secondOperand;
 
         }
+        
         else if(machineCode[pc][0] == "goto"){
 
             pc = stoi(machineCode[pc][1]) - 2;
         }
+        
         else if(machineCode[pc][0] == "LE"){
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
             int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
@@ -327,7 +334,8 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             if (firstOperand <= secondOperand)
                 pc = nextLineToJumpOn - 2;
         }
-         else if(machineCode[pc][0] == "GE"){
+        
+        else if(machineCode[pc][0] == "GE"){
 
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
             int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
@@ -337,6 +345,7 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
             if (firstOperand >= secondOperand)
                 pc = nextLineToJumpOn - 2;
         }
+        
         else if(machineCode[pc][0] == "LT"){
 
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
@@ -371,7 +380,8 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
                 pc = nextLineToJumpOn - 2;
 
         }
-         else if(machineCode[pc][0] == "NE"){
+        
+        else if(machineCode[pc][0] == "NE"){
 
             int firstOperand = getOperandData(map,ds,machineCode[pc][1]);
             int secondOperand = getOperandData(map,ds,machineCode[pc][2]);
@@ -416,27 +426,39 @@ void executeCode(vector<vector<string> > ST, vector<vector<string> > machineCode
         
             exit(0);
         }
+    
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    vector<string> Tac = getTac();
-    vector<vector<string> > ST = getSymTab();
-    vector<vector<string> > machineCode;
-    tokenize(Tac, machineCode);
+    if (argc == 2){
 
-    for (int i = 0; i < machineCode.size(); i++)
-    {
-        for (int j = 0; j < machineCode[i].size(); j++)
+        vector<string> Tac = getTac(argv[1]);
+        vector<vector<string> > ST = getSymTab();
+        vector<vector<string> > machineCode;
+        tokenize(Tac, machineCode);
+
+        for (int i = 0; i < machineCode.size(); i++)
         {
-            cout << machineCode[i][j] << " ";
+            for (int j = 0; j < machineCode[i].size(); j++)
+            {
+                cout << machineCode[i][j] << " ";
+            }
+            cout << endl;
         }
-        cout << endl;
-    }
+        
+        cout << "Executing ...\n";
+        executeCode(ST, machineCode);
     
-    cout << "Executing ...\n";
-    executeCode(ST, machineCode);
+    }else if (argc > 2)
+	{ //argument limit exceeds
+		cout << "Too many arguments" << endl;
+	}
+	else //if file name is'nt given
+	{
+		cout << "Please provide a file name" << endl;
+	}
 
     // for (int i = 0; i < ST.size(); i++)
     // {

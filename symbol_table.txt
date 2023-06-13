@@ -1,7 +1,7 @@
 ID    Type    Datatype  Initial_Value  Address
 markazi func khali 0 1
 x var adad 0 0
-y var adad 0 4
+y var adad 4 4
 z var adad 0 8
 n var adad 3 12
 t0 var adad 0 16

@@ -1,7 +1,7 @@
 kaam markazi@khali () karo
 
     rakho x@adad := 0;
-	rakho y@adad := 0;
+	rakho y@adad := 4;
 	rakho z@adad;
 	rakho n@adad := 3;
 	;rakho g;
